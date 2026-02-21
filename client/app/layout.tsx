@@ -1,5 +1,7 @@
 import FollowBar from "./_components/FollowBar";
 import Model from "./_components/Model";
+import LoginModel from "./_components/Models/LoginModel";
+import RegisterModel from "./_components/Models/RegisterModel";
 import Sidebar from "./_components/Sidebar";
 import "./globals.css";
 
@@ -13,6 +15,8 @@ export default function RootLayout({ children }: LayoutProps) {
       <body className="h-full bg-black">
         <div className="h-screen">
           {/* <Model isOpen title="Test Model" actionLabel="Submit" /> */}
+          <LoginModel />
+          <RegisterModel />
           <div className="container h-full mx-auto xl:px-30 max-w-6xl">
             <div className="grid grid-cols-4 h-full">
               <Sidebar />
