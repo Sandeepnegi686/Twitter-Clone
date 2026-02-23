@@ -4,8 +4,13 @@ import SidebarLogo from "./SidebarLogo";
 import SidebarItem from "./SidebarItem";
 import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
+// import useUserModel from "../_hooks/useUser";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "../_context/appContext";
 
 export default function Sidebar() {
+  const { user, setUser } = useAppContext();
+  const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
@@ -14,7 +19,7 @@ export default function Sidebar() {
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
       <div className="flex flex-col items-end">
-        <div className="space-y-2 lg:w-[230px]">
+        <div className="space-y-2 lg:w-57.5">
           <SidebarLogo />
           {items.map((item) => (
             <SidebarItem
@@ -24,7 +29,16 @@ export default function Sidebar() {
               icon={item.icon}
             />
           ))}
-          <SidebarItem onClick={() => {}} icon={BiLogOut} label="Logout" />
+          {user && (
+            <SidebarItem
+              onClick={() => {
+                setUser(null);
+                router.push("/api/logout");
+              }}
+              icon={BiLogOut}
+              label="Logout"
+            />
+          )}
           <SidebarTweetButton />
         </div>
       </div>

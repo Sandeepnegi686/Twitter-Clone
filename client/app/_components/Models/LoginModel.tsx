@@ -1,4 +1,3 @@
-"use client";
 import useLoginModel from "@/app/_hooks/useLoginModel";
 import { useCallback, useState } from "react";
 import Input from "../Input";
@@ -8,12 +7,13 @@ import useRegisterModel from "@/app/_hooks/useRegisterModel";
 import API_BASE_URL from "@/app/_lib/api";
 import axios from "axios";
 import toast from "react-hot-toast";
-import useUserModel from "@/app/_hooks/useUser";
+import { useAppContext } from "@/app/_context/appContext";
+// import useUserModel from "@/app/_hooks/useUser";
 
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
-  const userModel = useUserModel();
+  const { user, setUser } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -45,17 +45,17 @@ export default function LoginModel() {
         if (!data.success) {
           toast.error(data.message);
         } else {
-          userModel.setUser(data.user);
+          setUser(data.user);
           toast.success(data.message);
+          loginModel.onClose();
         }
-        loginModel.onClose();
       } catch (error) {
         console.log(error);
       } finally {
         setIsLoading(false);
       }
     },
-    [email, password, loginModel, userModel],
+    [email, password, loginModel],
   );
 
   const bodyContent = (

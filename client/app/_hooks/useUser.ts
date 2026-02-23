@@ -12,4 +12,4 @@ const useUserModel = create<userModelType>((set) => ({
   setUser: (user) => set({ user }),
 }));
 
-export default useUserModel;
+// export default useUserModel;

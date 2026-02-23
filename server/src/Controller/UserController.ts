@@ -19,12 +19,16 @@ async function signUp(req: Request<{}, {}, SignUpType, {}>, res: Response) {
   try {
     const { error } = registerValidation(req.body);
     if (error)
-      return res.status(400).json({ s: false, m: error.details[0].message });
+      return res
+        .status(400)
+        .json({ success: false, message: error.details[0].message });
     const { name, password, email, username } = req.body;
 
     const existingUser = await UserModel.findOne({ email, username });
     if (existingUser) {
-      return res.status(400).json({ s: false, m: "user already present" });
+      return res
+        .status(400)
+        .json({ success: false, message: "user already present" });
     }
 
     const user = await UserModel.create({
@@ -50,8 +54,8 @@ async function signUp(req: Request<{}, {}, SignUpType, {}>, res: Response) {
     });
 
     return res.status(201).json({
-      s: true,
-      m: "user created",
+      success: true,
+      message: "user created",
       user: {
         _id: user._id,
         name: user.name,
