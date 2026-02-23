@@ -28,29 +28,32 @@ export default function AppContext({
   const [user, setUser] = useState<UserType | null>(null);
 
   // const router = useRouter();
-  async function fetchUser() {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
-        credentials: "include",
-      });
-      if (!response.ok) {
-        setUser(null);
-        throw new Error(`HTTP server error, Status Code: ${response.status}`);
-      }
-      const data = await response.json();
-      if (!data.success) {
-        setUser(null);
-      }
-      console.log(data.user);
-      setUser(data.user);
-    } catch (error) {
-      const errMsg =
-        error instanceof Error ? error.message : "Something went wrong";
-      console.log(errMsg);
-    }
-  }
+  // async function fetchUser() {
+  //   try {
+  //     const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+  //       credentials: "include",
+  //     });
+  //     if (!response.ok) {
+  //       setUser(null);
+  //       throw new Error(`HTTP server error, Status Code: ${response.status}`);
+  //     }
+  //     const data = await response.json();
+  //     if (!data.success) {
+  //       setUser(null);
+  //     }
+  //     console.log(data.user);
+  //     setUser(data.user);
+  //   } catch (error) {
+  //     const errMsg =
+  //       error instanceof Error ? error.message : "Something went wrong";
+  //     console.log(errMsg);
+  //   }
+  // }
   useEffect(function () {
-    fetchUser();
+    const data = localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user")!)
+      : null;
+    if (data) setUser(data);
   }, []);
 
   return (

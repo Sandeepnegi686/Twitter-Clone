@@ -48,6 +48,7 @@ export default function RegisterModel() {
         } else {
           setUser(data.user);
           toast.success(data.message);
+          localStorage.setItem("user", JSON.stringify(data.user));
           registerModel.onClose();
         }
       } catch (error) {

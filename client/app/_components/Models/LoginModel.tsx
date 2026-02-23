@@ -48,6 +48,7 @@ export default function LoginModel() {
           setUser(data.user);
           toast.success(data.message);
           loginModel.onClose();
+          localStorage.setItem("user", JSON.stringify(data.user));
         }
       } catch (error) {
         console.log(error);
