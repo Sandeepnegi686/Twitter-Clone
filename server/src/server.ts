@@ -12,6 +12,12 @@ const DB = process.env.DB_URL || "";
 const PORT = process.env.PORT || 0;
 const CLIENT_URL = process.env.CLIENT_URL || "";
 
+//request logger
+app.use(function (req, res, next) {
+  console.log(`${req.method} request on ${req.url}`);
+  next();
+});
+
 app.use(express.json());
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(cookieParser());

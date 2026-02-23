@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import FollowBar from "./_components/FollowBar";
 import Model from "./_components/Model";
 import LoginModel from "./_components/Models/LoginModel";
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps) {
             </div>
           </div>
         </div>
+        <Toaster />
       </body>
     </html>
   );

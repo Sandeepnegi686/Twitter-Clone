@@ -74,7 +74,7 @@ async function loginUser(
   const { error } = loginValidation(req.body);
   if (error) {
     const errMsg = error?.details[0]?.message;
-    throw new APIError(errMsg, 400);
+    return res.status(400).json({ success: false, message: errMsg });
   }
   const { email, password } = req?.body;
 
@@ -82,13 +82,15 @@ async function loginUser(
     "+hashedPassword",
   );
   if (!existingUser) {
-    throw new APIError("user not found", 400);
+    return res.status(400).json({ success: false, message: "User not found" });
   }
 
   const isValidPassword = await existingUser.comparePassword(password);
 
   if (!isValidPassword) {
-    throw new APIError("password incorrect", 400);
+    return res
+      .status(400)
+      .json({ success: false, message: "Password incorrect" });
   }
 
   const data = {
@@ -106,8 +108,8 @@ async function loginUser(
     // sameSite: "lax",
   });
   return res.status(200).json({
-    s: true,
-    m: "logged in",
+    success: true,
+    message: "logged in",
     user: {
       _id: existingUser._id,
       name: existingUser.name,

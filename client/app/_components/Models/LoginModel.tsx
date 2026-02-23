@@ -5,10 +5,15 @@ import Input from "../Input";
 import Model from "../Model";
 import RegisterModel from "./RegisterModel";
 import useRegisterModel from "@/app/_hooks/useRegisterModel";
+import API_BASE_URL from "@/app/_lib/api";
+import axios from "axios";
+import toast from "react-hot-toast";
+import useUserModel from "@/app/_hooks/useUser";
 
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
+  const userModel = useUserModel();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -22,18 +27,36 @@ export default function LoginModel() {
     [isLoading, regiterModel, loginModel],
   );
 
-  const onSubmit = useCallback(function () {
-    try {
-      setIsLoading(true);
-      //TODO LOG IN
-
-      loginModel.onClose();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  const onSubmit = useCallback(
+    async function () {
+      try {
+        setIsLoading(true);
+        if (!email || !password) {
+          toast.error("Feilds are empty");
+          return;
+        }
+        const res = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
+          body: JSON.stringify({ email, password }),
+          credentials: "include",
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.message);
+        } else {
+          userModel.setUser(data.user);
+          toast.success(data.message);
+        }
+        loginModel.onClose();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [email, password, loginModel, userModel],
+  );
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
