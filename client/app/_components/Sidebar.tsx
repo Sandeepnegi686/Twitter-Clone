@@ -7,9 +7,13 @@ import SidebarTweetButton from "./SidebarTweetButton";
 // import useUserModel from "../_hooks/useUser";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "../_context/appContext";
+// import { getCurrentUser } from "../_hooks/getCurrentUser";
 
 export default function Sidebar() {
   const { user, setUser } = useAppContext();
+  // const { currentUser, error } = getCurrentUser();
+  // console.log(currentUser, error);
+
   const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
