@@ -14,7 +14,7 @@ import { mutate } from "swr";
 export default function RegisterModel() {
   const loginModel = useLoginModel();
   const registerModel = useRegisterModel();
-  const { user, setUser } = useAppContext();
+  // const { user, setUser } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");

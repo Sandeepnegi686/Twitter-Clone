@@ -39,7 +39,7 @@ export default function Sidebar() {
             <SidebarItem
               onClick={() => {
                 // setUser(null);
-                localStorage.removeItem("user");
+                // localStorage.removeItem("user");
                 router.push("/api/logout");
               }}
               icon={BiLogOut}

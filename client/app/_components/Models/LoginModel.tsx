@@ -16,7 +16,7 @@ import { mutate } from "swr";
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
-  const { user, setUser } = useAppContext();
+  // const { user, setUser } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -52,7 +52,7 @@ export default function LoginModel() {
         } else {
           // setUser(data.user);
           toast.success(data.message);
-          mutate("/api/getCurrentUser");
+          await mutate("/api/getCurrentUser");
           loginModel.onClose();
           // localStorage.setItem("user", JSON.stringify(data.user));
         }

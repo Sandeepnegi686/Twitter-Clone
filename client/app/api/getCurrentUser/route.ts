@@ -11,11 +11,8 @@ export async function GET() {
     cache: "no-store",
   });
 
-  console.log(response);
-
   if (!response.ok) {
-    return null;
-    // throw new Error(`HTTP ERROR, status code: ${response.status}`);
+    return Response.json(null, { status: 401 });
   }
 
   const data = await response.json();
