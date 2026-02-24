@@ -1,3 +1,4 @@
+"use client";
 import useLoginModel from "@/app/_hooks/useLoginModel";
 import { useCallback, useState } from "react";
 import Input from "../Input";
@@ -8,6 +9,8 @@ import API_BASE_URL from "@/app/_lib/api";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useAppContext } from "@/app/_context/appContext";
+import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
+import { mutate } from "swr";
 // import useUserModel from "@/app/_hooks/useUser";
 
 export default function LoginModel() {
@@ -17,6 +20,8 @@ export default function LoginModel() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const { currentUser } = getCurrentUser();
 
   const onToggle = useCallback(
     function () {
@@ -45,10 +50,11 @@ export default function LoginModel() {
         if (!data.success) {
           toast.error(data.message);
         } else {
-          setUser(data.user);
+          // setUser(data.user);
           toast.success(data.message);
+          mutate("/api/getCurrentUser");
           loginModel.onClose();
-          localStorage.setItem("user", JSON.stringify(data.user));
+          // localStorage.setItem("user", JSON.stringify(data.user));
         }
       } catch (error) {
         console.log(error);

@@ -1,4 +1,3 @@
-"use client";
 import { Toaster } from "react-hot-toast";
 import FollowBar from "./_components/FollowBar";
 import Model from "./_components/Model";

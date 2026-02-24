@@ -4,20 +4,17 @@ import { cookies } from "next/headers";
 export async function GET() {
   const cookieStore = cookies();
   const cookie = (await cookieStore).get("access-token");
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/auth/users`, {
     headers: {
       Cookie: `access-token=${cookie?.value}`,
     },
     cache: "no-store",
   });
 
-  console.log(response);
-
   if (!response.ok) {
-    return null;
-    // throw new Error(`HTTP ERROR, status code: ${response.status}`);
+    throw new Error(`HTTP ERROR, status code: ${response.status}`);
   }
 
   const data = await response.json();
-  return Response.json(data.user);
+  return Response.json(data.users);
 }

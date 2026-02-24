@@ -1,9 +1,18 @@
+"use client";
+
+import { useEffect } from "react";
+import { getAllUsers } from "../_hooks/useUsers";
 import Avatar from "./Avatar";
 
 export default function FollowBar() {
-  const users = [{ id: "123", name: "Rahul" }];
+  const { error, users, mutate, isLoading } = getAllUsers();
 
-  if (users.length === 0) return null;
+  // if (users.length === 0) return null;
+  // useEffect(function () {
+  //   mutate("/api/getAllUsers");
+  // }, []);
+  // console.log(users);
+  // if (isLoading) return null;
   return (
     <div className="px-6 py-4 hidden lg:block">
       <div className="bg-neutral-800 rounded-xl p-4">

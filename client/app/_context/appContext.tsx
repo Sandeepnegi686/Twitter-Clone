@@ -49,12 +49,12 @@ export default function AppContext({
   //     console.log(errMsg);
   //   }
   // }
-  useEffect(function () {
-    const data = localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user")!)
-      : null;
-    if (data) setUser(data);
-  }, []);
+  // useEffect(function () {
+  //   const data = localStorage.getItem("user")
+  //     ? JSON.parse(localStorage.getItem("user")!)
+  //     : null;
+  //   if (data) setUser(data);
+  // }, []);
 
   return (
     <APP_CONTEXT.Provider value={{ user, setUser }}>

@@ -1,3 +1,4 @@
+"use client";
 import { BsBellFill, BsHouseFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import SidebarLogo from "./SidebarLogo";
@@ -7,12 +8,12 @@ import SidebarTweetButton from "./SidebarTweetButton";
 // import useUserModel from "../_hooks/useUser";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "../_context/appContext";
-// import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { useEffect } from "react";
+import { mutate } from "swr";
 
 export default function Sidebar() {
-  const { user, setUser } = useAppContext();
-  // const { currentUser, error } = getCurrentUser();
-  // console.log(currentUser, error);
+  const { currentUser, error } = getCurrentUser();
 
   const router = useRouter();
   const items = [
@@ -20,6 +21,7 @@ export default function Sidebar() {
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
     { label: "Profile", href: "/users/123", icon: FaUser },
   ];
+  console.log(currentUser, error);
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
       <div className="flex flex-col items-end">
@@ -33,10 +35,10 @@ export default function Sidebar() {
               icon={item.icon}
             />
           ))}
-          {user && (
+          {currentUser && (
             <SidebarItem
               onClick={() => {
-                setUser(null);
+                // setUser(null);
                 localStorage.removeItem("user");
                 router.push("/api/logout");
               }}

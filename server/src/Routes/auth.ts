@@ -4,6 +4,7 @@ import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { loginUser, signUp } from "../Controller/UserController";
 import authenticateUser from "../middleware/authMiddleware";
+import UserModel from "../Model/UserModel";
 
 const router = express.Router();
 const CLIENT_URL = process.env.CLIENT_URL || "";
@@ -15,6 +16,11 @@ router.post("/login", loginUser);
 
 router.get("/me", authenticateUser, (req: Request, res: Response) => {
   return res.status(200).json({ success: true, user: req.user });
+});
+
+router.get("/users", async (req: Request, res: Response) => {
+  const users = await UserModel.find().sort({ createdAt: -1 });
+  return res.status(200).json({ success: true, users });
 });
 
 export default router;
