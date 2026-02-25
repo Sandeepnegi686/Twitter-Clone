@@ -2,12 +2,12 @@ import API_BASE_URL from "@/app/_lib/api";
 import { cookies } from "next/headers";
 
 export async function GET() {
-  const cookieStore = cookies();
-  const cookie = (await cookieStore).get("access-token");
+  // const cookieStore = cookies();
+  // const cookie = (await cookieStore).get("access-token");
   const response = await fetch(`${API_BASE_URL}/api/v1/auth/users`, {
-    headers: {
-      Cookie: `access-token=${cookie?.value}`,
-    },
+    // headers: {
+    //   Cookie: `access-token=${cookie?.value}`,
+    // },
     cache: "no-store",
   });
 
@@ -16,5 +16,6 @@ export async function GET() {
   }
 
   const data = await response.json();
+  console.log(data);
   return Response.json(data.users);
 }

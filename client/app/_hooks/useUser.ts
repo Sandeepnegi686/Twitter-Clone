@@ -1,10 +1,9 @@
 import { create } from "zustand";
-
-type UserType = { _id: string; email: string; name: string };
+import { UserType } from "../types/UserType";
 
 interface userModelType {
   user: UserType | null;
-  setUser: (user: UserType) => void;
+  setUser: (user: UserType | null) => void;
 }
 
 const useUserModel = create<userModelType>((set) => ({
@@ -12,4 +11,4 @@ const useUserModel = create<userModelType>((set) => ({
   setUser: (user) => set({ user }),
 }));
 
-// export default useUserModel;
+export default useUserModel;

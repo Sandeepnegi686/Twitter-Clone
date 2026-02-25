@@ -3,16 +3,12 @@
 import { useEffect } from "react";
 import { getAllUsers } from "../_hooks/useUsers";
 import Avatar from "./Avatar";
+// import { getCurrentUser } from "../_hooks/getCurrentUser";
 
 export default function FollowBar() {
-  const { error, users, mutate, isLoading } = getAllUsers();
+  const { users } = getAllUsers();
 
-  // if (users.length === 0) return null;
-  // useEffect(function () {
-  //   mutate("/api/getAllUsers");
-  // }, []);
-  // console.log(users);
-  // if (isLoading) return null;
+  console.log(users);
   return (
     <div className="px-6 py-4 hidden lg:block">
       <div className="bg-neutral-800 rounded-xl p-4">
@@ -20,7 +16,7 @@ export default function FollowBar() {
         <div className="flex flex-col gap-6 mt-4">
           {users.map((user: Record<string, any>) => {
             return (
-              <div className="flex gap-4" key={user.id}>
+              <div className="flex gap-4" key={user._id}>
                 <Avatar userId="123" />
                 <div className="flex flex-col">
                   <p className="text-white font-semibold text-sm">Rahul</p>

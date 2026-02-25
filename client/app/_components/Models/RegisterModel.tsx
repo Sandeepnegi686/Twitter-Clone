@@ -6,9 +6,10 @@ import Model from "../Model";
 import useLoginModel from "@/app/_hooks/useLoginModel";
 import toast from "react-hot-toast";
 import API_BASE_URL from "@/app/_lib/api";
-import { useAppContext } from "@/app/_context/appContext";
-import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
+// import { useAppContext } from "@/app/_context/appContext";
+// import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
+import useUserModel from "@/app/_hooks/useUser";
 // import useUserModel from "@/app/_hooks/useUser";
 
 export default function RegisterModel() {
@@ -19,6 +20,8 @@ export default function RegisterModel() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
+
+  const { setUser } = useUserModel();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -51,8 +54,9 @@ export default function RegisterModel() {
         } else {
           // setUser(data.user);
           toast.success(data.message);
-          mutate("/api/getCurrentUser");
-          // localStorage.setItem("user", JSON.stringify(data.user));
+          setUser(data.user!);
+          // mutate("/api/getCurrentUser");
+          localStorage.setItem("user", JSON.stringify(data.user));
           registerModel.onClose();
         }
       } catch (error) {

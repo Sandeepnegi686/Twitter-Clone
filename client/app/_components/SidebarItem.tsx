@@ -17,10 +17,12 @@ export default function SidebarItem({
   onClick,
 }: SidebarItemProps) {
   const router = useRouter();
-  const handleClick = useCallback(function () {
+
+  const handleClick = useCallback(() => {
     if (onClick) return onClick();
     if (href) router.push(href);
-  }, []);
+  }, [onClick, href, router]);
+
   return (
     <div className="flex items-center" onClick={handleClick}>
       <div className="relative rounded-full h-14 w-14 flex justify-center p-4 hover:bg-slate-900 hover:text-gray-400 cursor-pointer lg:hidden transition">

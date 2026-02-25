@@ -76,11 +76,13 @@ async function loginUser(
   res: Response,
 ) {
   const { error } = loginValidation(req.body);
+
   if (error) {
     const errMsg = error?.details[0]?.message;
     return res.status(400).json({ success: false, message: errMsg });
   }
   const { email, password } = req?.body;
+  // console.log(email, password);
 
   const existingUser = await UserModel.findOne({ email }).select(
     "+hashedPassword",

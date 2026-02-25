@@ -5,7 +5,7 @@ import LoginModel from "./_components/Models/LoginModel";
 import RegisterModel from "./_components/Models/RegisterModel";
 import Sidebar from "./_components/Sidebar";
 import "./globals.css";
-// import AppContext from "./_context/appContext";
+import { AppContext } from "./_context/appContext";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,23 +14,25 @@ interface LayoutProps {
 export default function RootLayout({ children }: LayoutProps) {
   return (
     <html lang="en">
-      <body className="h-full bg-black">
-        <div className="h-screen">
-          {/* <Model isOpen title="Test Model" actionLabel="Submit" /> */}
-          <LoginModel />
-          <RegisterModel />
-          <div className="container h-full mx-auto xl:px-30 max-w-6xl">
-            <div className="grid grid-cols-4 h-full">
-              <Sidebar />
-              <div className="col-span-3 lg:col-span-2 border-x border-neutral-800">
-                {children}
+      <AppContext>
+        <body className="h-full bg-black">
+          <div className="h-screen">
+            {/* <Model isOpen title="Test Model" actionLabel="Submit" /> */}
+            <LoginModel />
+            <RegisterModel />
+            <div className="container h-full mx-auto xl:px-30 max-w-6xl">
+              <div className="grid grid-cols-4 h-full">
+                <Sidebar />
+                <div className="col-span-3 lg:col-span-2 border-x border-neutral-800">
+                  {children}
+                </div>
+                <FollowBar />
               </div>
-              <FollowBar />
             </div>
           </div>
-        </div>
-        <Toaster />
-      </body>
+          <Toaster />
+        </body>
+      </AppContext>
     </html>
   );
 }

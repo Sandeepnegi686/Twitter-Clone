@@ -5,23 +5,32 @@ import SidebarLogo from "./SidebarLogo";
 import SidebarItem from "./SidebarItem";
 import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
-// import useUserModel from "../_hooks/useUser";
 import { useRouter } from "next/navigation";
-import { useAppContext } from "../_context/appContext";
-import { getCurrentUser } from "../_hooks/getCurrentUser";
+// import { getCurrentUser } from "../_hooks/getCurrentUser";
 import { useEffect } from "react";
-import { mutate } from "swr";
+import useUserModel from "../_hooks/useUser";
 
 export default function Sidebar() {
-  const { currentUser, error } = getCurrentUser();
-
+  // const { currentUser, error, isLoading, mutate } = getCurrentUser();
+  const { user, setUser } = useUserModel();
   const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
     { label: "Profile", href: "/users/123", icon: FaUser },
   ];
-  console.log(currentUser, error);
+
+  // const showLogoutButton = useMemo(
+  //   function () {
+  //     return currentUser ?? null;
+  //   },
+  //   [currentUser],
+  // );
+
+  // useEffect(function () {
+  //   mutate();
+  // }, []);
+
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
       <div className="flex flex-col items-end">
@@ -35,13 +44,14 @@ export default function Sidebar() {
               icon={item.icon}
             />
           ))}
-          {currentUser && (
+          {user && (
             <SidebarItem
               onClick={() => {
-                // setUser(null);
-                // localStorage.removeItem("user");
+                setUser(null);
+                localStorage.removeItem("user");
                 router.push("/api/logout");
               }}
+              // href={"/api/logout"}
               icon={BiLogOut}
               label="Logout"
             />

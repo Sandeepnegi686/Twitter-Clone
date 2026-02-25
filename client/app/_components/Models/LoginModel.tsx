@@ -5,23 +5,30 @@ import Input from "../Input";
 import Model from "../Model";
 import RegisterModel from "./RegisterModel";
 import useRegisterModel from "@/app/_hooks/useRegisterModel";
-import API_BASE_URL from "@/app/_lib/api";
+import API_BASE_URL, { api } from "@/app/_lib/api";
 import axios from "axios";
 import toast from "react-hot-toast";
-import { useAppContext } from "@/app/_context/appContext";
-import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
+// import { useAppContext } from "@/app/_context/appContext";
+// import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
-// import useUserModel from "@/app/_hooks/useUser";
+import useUserModel from "@/app/_hooks/useUser";
+import { UserType } from "@/app/types/UserType";
+
+interface LoginApiResponse {
+  success: boolean;
+  message: string;
+  user?: UserType;
+}
 
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
+  // const { currentUser } = getCurrentUser();
+  const { setUser } = useUserModel();
   // const { user, setUser } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const { currentUser } = getCurrentUser();
 
   const onToggle = useCallback(
     function () {
@@ -40,21 +47,24 @@ export default function LoginModel() {
           toast.error("Feilds are empty");
           return;
         }
-        const res = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
-        if (!data.success) {
-          toast.error(data.message);
+        const res = await api.post<LoginApiResponse>(
+          `${API_BASE_URL}/api/v1/auth/login`,
+          {
+            email,
+            password,
+          },
+        );
+        const { data } = res;
+        if (!data.success!) {
+          toast.error(data.message!);
         } else {
           // setUser(data.user);
-          toast.success(data.message);
-          await mutate("/api/getCurrentUser");
+          toast.success(data.message!);
+          // await mutate("/api/getCurrentUser");
+          setUser(data.user!);
+          // console.log(currentUser);
           loginModel.onClose();
-          // localStorage.setItem("user", JSON.stringify(data.user));
+          localStorage.setItem("user", JSON.stringify(data.user));
         }
       } catch (error) {
         console.log(error);

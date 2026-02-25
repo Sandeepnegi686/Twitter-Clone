@@ -1,6 +1,9 @@
-async function fetcher<T>(url: string): Promise<T> {
-  const { data } = await axios.get<T>(url);
-  return data;
-}
+export const fetcher = async (url: string) => {
+  const res = await fetch(url);
 
-export default fetcher;
+  if (!res.ok) {
+    throw new Error("Failed to fetch");
+  }
+
+  return res.json();
+};

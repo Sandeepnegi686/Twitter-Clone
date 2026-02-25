@@ -1,9 +1,9 @@
 import useSWR from "swr";
-import fetcher from "../_lib/fetcher";
-import { UserType } from "../types/UserType";
+import { fetcher } from "../_lib/fetcher";
+// import { UserType } from "../types/UserType";
 
 export function getCurrentUser() {
-  const { data, error, isLoading, mutate } = useSWR<UserType | null>(
+  const { data, error, isLoading, mutate } = useSWR(
     "/api/getCurrentUser",
     fetcher,
     {
@@ -12,7 +12,6 @@ export function getCurrentUser() {
       revalidateOnReconnect: false,
     },
   );
-  console.log(data);
 
   return {
     currentUser: data || null,
