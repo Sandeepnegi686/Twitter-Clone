@@ -27,6 +27,7 @@ const APP_CONTEXT = createContext<ContextType>(null);
 export function AppContext({ children }: { children: React.ReactNode }) {
   const { user, setUser } = useUserModel();
   const { users } = getAllUsers();
+  // const { setUsers } = useUsersModel();
 
   // const router = useRouter();
   async function fetchUser() {
@@ -59,7 +60,7 @@ export function AppContext({ children }: { children: React.ReactNode }) {
   }, []);
 
   // useEffect(function () {
-  //   mutate("/api/getAllUsers");
+  //   setUsers(users);
   // }, []);
 
   return (
