@@ -14,7 +14,7 @@ export function getAllUsers() {
     },
   );
 
-  console.log(data);
+  // console.log(data);
 
   return {
     users: data || [],
@@ -24,14 +24,14 @@ export function getAllUsers() {
   };
 }
 
-// interface usersModelType {
-//   users: UserType[];
-//   setUsers: (users: UserType[]) => void;
-// }
+interface usersModelType {
+  users: UserType[];
+  setUsers: (users: UserType[]) => void;
+}
 
-// const useUsersModel = create<usersModelType>((set) => ({
-//   users: [],
-//   setUsers: (users) => set({ users }),
-// }));
+const useUsersModel = create<usersModelType>((set) => ({
+  users: [],
+  setUsers: (users) => set({ users }),
+}));
 
-// export { useUsersModel };
+export { useUsersModel };
