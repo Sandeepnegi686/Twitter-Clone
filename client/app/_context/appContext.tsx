@@ -26,10 +26,11 @@ const APP_CONTEXT = createContext<ContextType>(null);
 
 export function AppContext({ children }: { children: React.ReactNode }) {
   const { user, setUser } = useUserModel();
-  const { users } = getAllUsers();
+  // const { users } = getAllUsers();
   // const { setUsers } = useUsersModel();
 
   // const router = useRouter();
+
   async function fetchUser() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
@@ -59,9 +60,14 @@ export function AppContext({ children }: { children: React.ReactNode }) {
     if (data) setUser(data);
   }, []);
 
-  // useEffect(function () {
-  //   setUsers(users);
-  // }, []);
+  // const { mutate: mutateAllUsers, error, users } = getAllUsers();
+  // console.log(users);
+  useEffect(function () {
+    async function fetchAllUsers() {
+      await mutate("/api/getAllUsers");
+    }
+    fetchAllUsers();
+  }, []);
 
   return (
     <APP_CONTEXT.Provider value={{ user, setUser }}>
