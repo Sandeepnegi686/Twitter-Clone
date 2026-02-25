@@ -4,18 +4,24 @@ import { useCallback } from "react";
 
 interface AvatarProps {
   userId: string;
+  profileImage?: string;
   isLarge?: boolean;
   hasBorder?: boolean;
 }
 
-export default function Avatar({ userId, hasBorder, isLarge }: AvatarProps) {
+export default function Avatar({
+  userId,
+  hasBorder,
+  isLarge,
+  profileImage,
+}: AvatarProps) {
   const router = useRouter();
 
-  const onClick = useCallback(function (event: any) {
-    event.stopPropagation();
-    const url = `/users/${userId}`;
-    router.push(url);
-  }, []);
+  // const onClick = useCallback(function (event: any) {
+  //   event.stopPropagation();
+  //   const url = `/users/${userId}`;
+  //   router.push(url);
+  // }, []);
 
   return (
     <div
@@ -26,7 +32,7 @@ export default function Avatar({ userId, hasBorder, isLarge }: AvatarProps) {
         style={{ objectFit: "cover", borderRadius: "100%" }}
         alt="Avatar"
         onClick={(e) => router.push(`/users/${userId}`)}
-        src="/images/placeholder.jpg"
+        src={profileImage || "/images/placeholder.jpg"}
       />
     </div>
   );

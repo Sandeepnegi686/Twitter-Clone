@@ -17,8 +17,8 @@ interface LayoutProps {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
-  const { user, setUser } = useUserModel();
-  const { users, setUsers } = useUsersModel();
+  const { setUser } = useUserModel();
+  const { setUsers } = useUsersModel();
 
   async function fetchAllUsers() {
     try {

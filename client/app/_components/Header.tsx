@@ -4,7 +4,7 @@ import { useCallback } from "react";
 import { BiArrowBack } from "react-icons/bi";
 
 interface HeaderProps {
-  label: string;
+  label?: string;
   showBackArrow?: boolean;
 }
 

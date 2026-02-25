@@ -1,6 +1,35 @@
-async function Page({ params }: { params: Promise<{ userId: string }> }) {
-  const userId = (await params).userId;
-  return <div className="text-6xl text-red-500">User Id: {userId}</div>;
+"use client";
+import Header from "@/app/_components/Header";
+import UserHero from "@/app/_components/UserHero";
+import useUserModel from "@/app/_hooks/useUser";
+import { useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
+
+import { ClipLoader } from "react-spinners";
+
+function Page() {
+  // const userId = params.userId;
+  // console.log(params);
+  const router = useRouter();
+  const searchParams = useParams();
+  const userId = searchParams?.userId || " ";
+  console.log(searchParams);
+  const { user } = useUserModel();
+
+  if (!1) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <ClipLoader color="lightblue" size={80} />
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Header label={user?.name} showBackArrow />
+      <UserHero userId={userId as string} />
+    </>
+  );
 }
 
 export default Page;

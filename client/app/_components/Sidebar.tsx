@@ -1,4 +1,4 @@
-"use client";
+// "use client";
 import { BsBellFill, BsHouseFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import SidebarLogo from "./SidebarLogo";
@@ -7,7 +7,7 @@ import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
 import { useRouter } from "next/navigation";
 // import { getCurrentUser } from "../_hooks/getCurrentUser";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import useUserModel from "../_hooks/useUser";
 
 export default function Sidebar() {
@@ -19,17 +19,6 @@ export default function Sidebar() {
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
     { label: "Profile", href: "/users/123", icon: FaUser },
   ];
-
-  // const showLogoutButton = useMemo(
-  //   function () {
-  //     return currentUser ?? null;
-  //   },
-  //   [currentUser],
-  // );
-
-  // useEffect(function () {
-  //   mutate();
-  // }, []);
 
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">

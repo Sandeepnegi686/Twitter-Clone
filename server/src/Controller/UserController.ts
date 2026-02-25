@@ -56,11 +56,7 @@ async function signUp(req: Request<{}, {}, SignUpType, {}>, res: Response) {
     return res.status(201).json({
       success: true,
       message: "user created",
-      user: {
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-      },
+      user,
     });
   } catch (error) {
     console.log(error);
@@ -98,6 +94,8 @@ async function loginUser(
       .status(400)
       .json({ success: false, message: "Password incorrect" });
   }
+  const userObject = existingUser.toObject();
+  const { hashedPassword, ...user } = userObject;
 
   const data = {
     _id: existingUser._id,
@@ -116,11 +114,7 @@ async function loginUser(
   return res.status(200).json({
     success: true,
     message: "logged in",
-    user: {
-      _id: existingUser._id,
-      name: existingUser.name,
-      email: existingUser.email,
-    },
+    user,
   });
 }
 
