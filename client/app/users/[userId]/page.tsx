@@ -10,13 +10,13 @@ import { ClipLoader } from "react-spinners";
 function Page() {
   // const userId = params.userId;
   // console.log(params);
-  const router = useRouter();
+  // const router = useRouter();
   const searchParams = useParams();
   const userId = searchParams?.userId || " ";
   console.log(searchParams);
   const { user } = useUserModel();
 
-  if (!1) {
+  if (!userId) {
     return (
       <div className="flex justify-center items-center h-full">
         <ClipLoader color="lightblue" size={80} />
