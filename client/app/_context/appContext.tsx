@@ -13,6 +13,8 @@ import API_BASE_URL from "../_lib/api";
 import toast from "react-hot-toast";
 import useUserModel from "../_hooks/useUser";
 import { UserType } from "../types/UserType";
+import { mutate } from "swr";
+import { getAllUsers } from "../_hooks/useUsers";
 // type UserType = { _id: string; email: string; name: string };
 
 type ContextType = {
@@ -24,6 +26,7 @@ const APP_CONTEXT = createContext<ContextType>(null);
 
 export function AppContext({ children }: { children: React.ReactNode }) {
   const { user, setUser } = useUserModel();
+  const { users } = getAllUsers();
 
   // const router = useRouter();
   async function fetchUser() {
@@ -54,8 +57,9 @@ export function AppContext({ children }: { children: React.ReactNode }) {
       : null;
     if (data) setUser(data);
   }, []);
+
   // useEffect(function () {
-  //   fetchUser();
+  //   mutate("/api/getAllUsers");
   // }, []);
 
   return (

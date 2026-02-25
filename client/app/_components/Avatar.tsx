@@ -25,7 +25,7 @@ export default function Avatar({ userId, hasBorder, isLarge }: AvatarProps) {
         fill
         style={{ objectFit: "cover", borderRadius: "100%" }}
         alt="Avatar"
-        onClick={onClick}
+        onClick={(e) => router.push(`/users/${userId}`)}
         src="/images/placeholder.jpg"
       />
     </div>

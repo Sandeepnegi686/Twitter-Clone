@@ -13,6 +13,8 @@ export function getAllUsers() {
     },
   );
 
+  console.log(data);
+
   return {
     users: data || [],
     isLoading,

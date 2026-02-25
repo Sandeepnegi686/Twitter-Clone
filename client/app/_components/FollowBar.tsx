@@ -8,7 +8,7 @@ import Avatar from "./Avatar";
 export default function FollowBar() {
   const { users } = getAllUsers();
 
-  // console.log(users);
+  if (users.length === 0) return null;
   return (
     <div className="px-6 py-4 hidden lg:block">
       <div className="bg-neutral-800 rounded-xl p-4">
@@ -17,10 +17,12 @@ export default function FollowBar() {
           {users.map((user: Record<string, any>) => {
             return (
               <div className="flex gap-4" key={user._id}>
-                <Avatar userId="123" />
+                <Avatar userId={user._id} />
                 <div className="flex flex-col">
-                  <p className="text-white font-semibold text-sm">Rahul</p>
-                  <p className="text-neutral-400 text-sm">@rahul_negi</p>
+                  <p className="text-white font-semibold text-sm">
+                    {user.name}
+                  </p>
+                  <p className="text-neutral-400 text-sm">@{user.username}</p>
                 </div>
               </div>
             );
