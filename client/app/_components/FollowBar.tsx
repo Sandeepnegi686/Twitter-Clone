@@ -15,9 +15,16 @@ export default function FollowBar() {
                 <Avatar userId={user._id} profileImage={user?.profileImage} />
                 <div className="flex flex-col">
                   <p className="text-white font-semibold text-sm">
-                    {user.name}
+                    {user?.name.length < 10
+                      ? (user.name as string)
+                      : `${user.name.split(" ")[0]}`}
                   </p>
-                  <p className="text-neutral-400 text-sm">@{user.username}</p>
+                  <p className="text-neutral-400 text-sm">
+                    @
+                    {user?.username.length < 10
+                      ? (user.username as string)
+                      : `${user.username.slice(0, 9)}..`}
+                  </p>
                 </div>
               </div>
             );

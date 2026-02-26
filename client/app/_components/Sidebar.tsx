@@ -17,7 +17,7 @@ export default function Sidebar() {
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
-    { label: "Profile", href: "/users/123", icon: FaUser },
+    { label: "Profile", href: "/users/", icon: FaUser },
   ];
 
   return (

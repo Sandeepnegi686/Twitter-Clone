@@ -2,6 +2,8 @@
 import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { IconType } from "react-icons";
+import useUserModel from "../_hooks/useUser";
+import useLoginModel from "../_hooks/useLoginModel";
 
 interface SidebarItemProps {
   label: string;
@@ -17,11 +19,17 @@ export default function SidebarItem({
   onClick,
 }: SidebarItemProps) {
   const router = useRouter();
+  const { user } = useUserModel();
+  const { isOpen, onOpen } = useLoginModel();
 
   const handleClick = useCallback(() => {
     if (onClick) return onClick();
+    if (!user && href !== "/") {
+      onOpen();
+      return;
+    }
     if (href) router.push(href);
-  }, [onClick, href, router]);
+  }, [onClick, href, router, isOpen]);
 
   return (
     <div className="flex items-center" onClick={handleClick}>

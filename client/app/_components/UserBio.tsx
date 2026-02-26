@@ -1,0 +1,86 @@
+import React, { useEffect, useMemo, useState } from "react";
+import useUserModel from "../_hooks/useUser";
+import { UserType } from "../types/UserType";
+import API_BASE_URL from "../_lib/api";
+import { format } from "date-fns";
+import Button from "./Button";
+import { BiCalendar } from "react-icons/bi";
+
+interface UserBioProps {
+  userId: string;
+}
+
+export default function UserBio({ userId }: UserBioProps) {
+  const { user } = useUserModel();
+
+  const [fetchedUser, setFetchedUser] = useState<UserType | null>(null);
+  const [followerCount, setFollowerCount] = useState(0);
+
+  async function fetchUser() {
+    const res = await fetch(`${API_BASE_URL}/api/v1/user/${userId}`);
+    if (!res.ok) throw new Error("HTTP error");
+    const data = await res.json();
+    setFetchedUser(data.user as UserType);
+    setFollowerCount(data.followersCount);
+    // const res2 = await fetch(
+    //   `${API_BASE_URL}/api/v1/auth/userFollowersCount/${data.user._id}`,
+    // );
+    // if (!res2.ok) throw new Error("HTTP error");
+    // const data2 = await res.json();
+  }
+
+  useEffect(function () {
+    fetchUser();
+  }, []);
+
+  // console.log(fetchedUser);
+  const createdAt = useMemo(
+    function () {
+      if (!fetchedUser?.createdAt) {
+        return null;
+      }
+      return format(new Date(fetchedUser.createdAt), "MMMM yyyy");
+    },
+    [fetchedUser?.createdAt],
+  );
+  return (
+    <div className="border-b border-neutral-800 pb-4">
+      <div className="flex justify-end p-2">
+        {user?._id === userId ? (
+          <Button secondary label="Edit" onClick={() => {}} />
+        ) : (
+          <Button onClick={() => {}} label="Follow" secondary />
+        )}
+      </div>
+      <div className="mt-8 px-4">
+        <div className="flex flex-col">
+          <p className="text-white text-2xl font-semibold">
+            {fetchedUser?.name}
+          </p>
+          <p className="text-md text-neutral-500">@{fetchedUser?.username}</p>
+        </div>
+        <div className="flex flex-col mt-4">
+          <p className="text-white">{fetchedUser?.bio}</p>
+          <div className="flex items-center gap-2 mt-4 text-neutral-500">
+            <BiCalendar size={24} />
+            <p> Joined {createdAt}</p>
+          </div>
+        </div>
+        <div className="flex items-center mt-4 gap-6">
+          <div className="flex items-center gap-1">
+            <p className="text-white">
+              {fetchedUser?.followingIds?.length || 0}
+            </p>
+            <p className="text-neutral-500">Following</p>
+          </div>
+        </div>
+        <div className="flex items-center mt-4 gap-6">
+          <div className="flex items-center gap-1">
+            <p className="text-white">{followerCount}</p>
+            <p className="text-neutral-500">Followers</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

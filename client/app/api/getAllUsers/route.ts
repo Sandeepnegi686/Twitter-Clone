@@ -1,7 +1,7 @@
 import API_BASE_URL from "@/app/_lib/api";
 
 export async function GET() {
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/users`, {
+  const response = await fetch(`${API_BASE_URL}/api/v1/user/users`, {
     cache: "no-store",
   });
   if (!response.ok) {

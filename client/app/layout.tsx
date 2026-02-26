@@ -22,7 +22,7 @@ export default function RootLayout({ children }: LayoutProps) {
 
   async function fetchAllUsers() {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/v1/auth/users`);
+      const response = await fetch(`${API_BASE_URL}/api/v1/user/users`);
       if (!response.ok) {
         throw new Error(`HTTP server error, Status Code: ${response.status}`);
       }

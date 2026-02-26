@@ -4,6 +4,7 @@ require("dotenv").config();
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRouter from "./Routes/auth";
+import userRouter from "./Routes/user";
 import { errorHandler } from "./middleware/errorHandler";
 // import "./config/passport";
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 
 app.use("/api/v1/auth/", authRouter);
+app.use("/api/v1/user/", userRouter);
 
 app.use(errorHandler);
 

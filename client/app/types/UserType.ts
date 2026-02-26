@@ -9,7 +9,10 @@ export interface UserType {
   coverImage?: string;
   profileImage?: string;
   followingIds?: string[];
+  followersCount?: number;
   hasNotifications?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 
   posts?: string[];
   comments?: string[];

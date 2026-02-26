@@ -21,7 +21,7 @@ export default function Button({
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-2 ${fullWidth ? "w-full" : "w-fit"} ${secondary ? "bg-white" : "bg-sky-500"} ${secondary ? "text-black" : "text-white"} ${secondary ? "border-black" : "border-sky-500"} ${large ? "text-xl" : "text-md"} ${large ? "py-3" : "py-2"} ${outline ? "bg-transparent" : ""} ${outline ? "text-white" : ""}`}
+      className={`disabled:opacity-70 disabled:cursor-not-allowed rounded-full font-semibold hover:opacity-80 transition border-2 ${fullWidth ? "w-full" : "w-fit"} ${secondary ? "bg-white" : "bg-sky-500"} ${secondary ? "text-black" : "text-white"} ${secondary ? "border-black" : "border-sky-500"} ${large ? "text-xl" : "text-md"} ${large ? "py-3" : "py-2"} ${large ? "px-3" : "px-2"}  ${outline ? "bg-transparent" : ""} ${outline ? "text-white" : ""}`}
     >
       {label}
     </button>

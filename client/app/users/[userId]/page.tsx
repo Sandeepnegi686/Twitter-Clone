@@ -1,11 +1,16 @@
 "use client";
-import Header from "@/app/_components/Header";
-import UserHero from "@/app/_components/UserHero";
-import useUserModel from "@/app/_hooks/useUser";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
-
+import useSWR from "swr";
 import { ClipLoader } from "react-spinners";
+
+import Header from "@/app/_components/Header";
+import UserBio from "@/app/_components/UserBio";
+import UserHero from "@/app/_components/UserHero";
+import useUserModel from "@/app/_hooks/useUser";
+import { useEffect, useState } from "react";
+import API_BASE_URL from "@/app/_lib/api";
+import { UserType } from "@/app/types/UserType";
 
 function Page() {
   // const userId = params.userId;
@@ -13,7 +18,8 @@ function Page() {
   // const router = useRouter();
   const searchParams = useParams();
   const userId = searchParams?.userId || " ";
-  console.log(searchParams);
+  // console.log(searchParams);
+
   const { user } = useUserModel();
 
   if (!userId) {
@@ -28,6 +34,7 @@ function Page() {
     <>
       <Header label={user?.name} showBackArrow />
       <UserHero userId={userId as string} />
+      <UserBio userId={userId as string} />
     </>
   );
 }

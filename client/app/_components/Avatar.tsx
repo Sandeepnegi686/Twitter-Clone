@@ -17,11 +17,11 @@ export default function Avatar({
 }: AvatarProps) {
   const router = useRouter();
 
-  // const onClick = useCallback(function (event: any) {
-  //   event.stopPropagation();
-  //   const url = `/users/${userId}`;
-  //   router.push(url);
-  // }, []);
+  const onClick = useCallback(function (event: any) {
+    event.stopPropagation();
+    const url = `/users/${userId}`;
+    router.push(url);
+  }, []);
 
   return (
     <div
@@ -29,9 +29,10 @@ export default function Avatar({
     >
       <Image
         fill
-        style={{ objectFit: "cover", borderRadius: "100%" }}
+        objectFit="cover"
+        style={{ borderRadius: "100%" }}
         alt="Avatar"
-        onClick={(e) => router.push(`/users/${userId}`)}
+        onClick={onClick}
         src={profileImage || "/images/placeholder.jpg"}
       />
     </div>
