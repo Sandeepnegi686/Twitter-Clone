@@ -1,15 +1,15 @@
 import { create } from "zustand";
 
-interface LoginModelStore {
+interface EditModelStore {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
 }
 
-const useLoginModel = create<LoginModelStore>((set) => ({
+const useEditModel = create<EditModelStore>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),
 }));
 
-export default useLoginModel;
+export default useEditModel;

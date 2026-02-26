@@ -1,7 +1,7 @@
 "use client";
 import { Toaster } from "react-hot-toast";
 import FollowBar from "./_components/FollowBar";
-import Model from "./_components/Model";
+import EditModel from "./_components/Models/EditModel";
 import LoginModel from "./_components/Models/LoginModel";
 import RegisterModel from "./_components/Models/RegisterModel";
 import Sidebar from "./_components/Sidebar";
@@ -17,7 +17,7 @@ interface LayoutProps {
 }
 
 export default function RootLayout({ children }: LayoutProps) {
-  const { setUser } = useUserModel();
+  const { setUser, user } = useUserModel();
   const { setUsers } = useUsersModel();
 
   async function fetchAllUsers() {
@@ -53,6 +53,7 @@ export default function RootLayout({ children }: LayoutProps) {
           {/* <Model isOpen title="Test Model" actionLabel="Submit" /> */}
           <LoginModel />
           <RegisterModel />
+          <EditModel />
           <div className="container h-full mx-auto xl:px-30 max-w-6xl">
             <div className="grid grid-cols-4 h-full">
               <Sidebar />

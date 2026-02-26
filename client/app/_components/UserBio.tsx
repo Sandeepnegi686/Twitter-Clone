@@ -5,6 +5,7 @@ import API_BASE_URL from "../_lib/api";
 import { format } from "date-fns";
 import Button from "./Button";
 import { BiCalendar } from "react-icons/bi";
+import useEditModel from "../_hooks/useEditModel";
 
 interface UserBioProps {
   userId: string;
@@ -12,6 +13,7 @@ interface UserBioProps {
 
 export default function UserBio({ userId }: UserBioProps) {
   const { user } = useUserModel();
+  const { onOpen } = useEditModel();
 
   const [fetchedUser, setFetchedUser] = useState<UserType | null>(null);
   const [followerCount, setFollowerCount] = useState(0);
@@ -22,11 +24,6 @@ export default function UserBio({ userId }: UserBioProps) {
     const data = await res.json();
     setFetchedUser(data.user as UserType);
     setFollowerCount(data.followersCount);
-    // const res2 = await fetch(
-    //   `${API_BASE_URL}/api/v1/auth/userFollowersCount/${data.user._id}`,
-    // );
-    // if (!res2.ok) throw new Error("HTTP error");
-    // const data2 = await res.json();
   }
 
   useEffect(function () {
@@ -47,7 +44,7 @@ export default function UserBio({ userId }: UserBioProps) {
     <div className="border-b border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
         {user?._id === userId ? (
-          <Button secondary label="Edit" onClick={() => {}} />
+          <Button secondary label="Edit" onClick={() => onOpen()} />
         ) : (
           <Button onClick={() => {}} label="Follow" secondary />
         )}

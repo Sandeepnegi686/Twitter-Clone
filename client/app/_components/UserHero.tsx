@@ -11,7 +11,9 @@ export default function UserHero({ userId }: UserHeroProps) {
   const { user } = useUserModel();
   return (
     <div className="bg-neutral-700 h-44 relative">
-      {user?.coverImage && <Image src={user?.coverImage} fill alt="Cover" />}
+      {user?.coverImage && (
+        <Image src={user?.coverImage} fill alt="Cover" objectFit="cover" />
+      )}
       <div className="absolute -bottom-16 left-4">
         <Avatar userId={userId} isLarge hasBorder />
       </div>
