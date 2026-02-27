@@ -3,9 +3,9 @@ import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 
 interface ImageUploadProps {
-  onChange: (base64: string) => void;
+  onChange: (file: File, preview: string) => void;
   label: string;
-  value?: string;
+  preview?: string;
   disabled?: boolean;
 }
 
@@ -13,32 +13,31 @@ export default function ImageUpload({
   onChange,
   label,
   disabled,
-  value,
+  preview,
 }: ImageUploadProps) {
-  const [base64, setBase64] = useState(value);
-
-  const handleChange = useCallback(function (base64: string) {
-    onChange(base64);
-  }, []);
+  const handleChange = useCallback(
+    function (file: File, preview: string) {
+      onChange(file, preview);
+    },
+    [onChange],
+  );
 
   const handleDrop = useCallback(
-    function (files: any) {
+    function (files: File[]) {
       const file = files[0];
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        setBase64(e.target.result);
-        handleChange(e.target.result);
-      };
-      reader.readAsDataURL(file);
+      if (!file) return;
+      const preview = URL.createObjectURL(file);
+      handleChange(file, preview);
     },
     [handleChange],
   );
 
   const { getRootProps, getInputProps } = useDropzone({
     maxFiles: 1,
+    maxSize: 5 * 1024 * 1024,
     onDrop: handleDrop,
     disabled,
-    accept: { "image/jpeg": [], "image/png": [] },
+    accept: { "image/jpeg": [], "image/png": [], "image/jpg": [] },
   });
 
   return (
@@ -49,9 +48,9 @@ export default function ImageUpload({
       })}
     >
       <input {...getInputProps()} />
-      {base64 ? (
+      {preview ? (
         <div className="flex items-center justify-center">
-          <Image src={base64} height="100" width="100" alt="Uploaded image" />
+          <Image src={preview} height="100" width="100" alt="Uploaded image" />
         </div>
       ) : (
         <p className="text-white">{label}</p>

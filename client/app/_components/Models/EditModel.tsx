@@ -22,20 +22,24 @@ import ImageUpload from "../ImageUpload";
 //   user?: UserType;
 // }
 
-export default function LoginModel() {
+export default function EditModel() {
   const { user } = useUserModel();
   const { onClose, isOpen } = useEditModel();
 
-  const [profileImage, setProfileImage] = useState("");
-  const [coverImage, setCoverImage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
+  const [profileImagePreview, setProfileImagePreview] = useState<string>("");
+  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
+  const [coverImagePreview, setCoverImagePreview] = useState<string>("");
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
 
   useEffect(
     function () {
-      setProfileImage(user?.profileImage || "");
-      setCoverImage(user?.coverImage || "");
+      // setProfileImage(user?.profileImage || "");
+      // setCoverImage(user?.coverImage || "");
       setName(user?.name || "");
       setUsername(user?.username || "");
       setBio(user?.bio || "");
@@ -49,14 +53,21 @@ export default function LoginModel() {
     ],
   );
 
-  const [isLoading, setIsLoading] = useState(false);
-
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
-      await api.post("/", { profileImage, coverImage, name, username, bio });
+      const formData = new FormData();
+      formData.append("name", name);
+      formData.append("username", username);
+      formData.append("bio", bio);
+      if (profileImageFile) formData.append("profileImage", profileImageFile);
+      if (coverImageFile) formData.append("coverImage", coverImageFile);
+      await api.post("/api/v1/user/update-bio", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
       onClose();
     } catch (error) {
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -65,16 +76,22 @@ export default function LoginModel() {
   const bodyContent = (
     <div className="flex flex-col gap-4">
       <ImageUpload
-        value={profileImage}
+        preview={profileImagePreview}
         disabled={isLoading}
-        onChange={(image) => setProfileImage(image)}
+        onChange={(file: File, preivw: string) => {
+          setProfileImageFile(file);
+          setProfileImagePreview(preivw);
+        }}
         label="Upload profile image"
       />
       <ImageUpload
-        value={coverImage}
+        preview={coverImagePreview}
         disabled={isLoading}
-        onChange={(image) => setCoverImage(image)}
-        label="Upload profile image"
+        onChange={(file: File, preview: string) => {
+          setCoverImageFile(file);
+          setCoverImagePreview(preview);
+        }}
+        label="Upload Cover image"
       />
       <Input
         placeholder="Name"
@@ -85,7 +102,7 @@ export default function LoginModel() {
       <Input
         placeholder="Username"
         type="text"
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
         disabled={isLoading}
       />
       <Input
