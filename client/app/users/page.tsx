@@ -9,9 +9,9 @@ export default function Page() {
 
   return (
     <div className="">
-      <Header label={user?.name} showBackArrow />
+      {/* <Header label={user?.name} showBackArrow />
       <UserHero userId={user?._id as string} />
-      <UserBio userId={user?._id as string} />
+      <UserBio userId={user?._id as string} /> */}
     </div>
   );
 }

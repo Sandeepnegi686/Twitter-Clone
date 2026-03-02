@@ -31,8 +31,16 @@ export default function EditModel() {
   const [profileImagePreview, setProfileImagePreview] = useState<string>("");
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string>("");
-  const [name, setName] = useState(user?.name);
-  const [bio, setBio] = useState(user?.bio);
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
+
+  useEffect(
+    function () {
+      setName(user?.name!);
+      setBio(user?.bio!);
+    },
+    [user?.name, user?.bio],
+  );
 
   const onSubmit = useCallback(async () => {
     try {
@@ -60,7 +68,7 @@ export default function EditModel() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [name, bio, profileImageFile, coverImageFile, onClose, setUser]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
@@ -85,12 +93,14 @@ export default function EditModel() {
       <Input
         placeholder="Name"
         type="text"
+        value={name}
         onChange={(e) => setName(e.target.value)}
         disabled={isLoading}
       />
       <Input
         placeholder="Bio"
         type="text"
+        value={bio}
         onChange={(e) => setBio(e.target.value)}
         disabled={isLoading}
       />
