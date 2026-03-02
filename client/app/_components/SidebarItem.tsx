@@ -29,7 +29,7 @@ export default function SidebarItem({
       return;
     }
     if (href) router.push(href);
-  }, [onClick, href, router, isOpen]);
+  }, [onClick, href, router, isOpen, user]);
 
   return (
     <div className="flex items-center" onClick={handleClick}>

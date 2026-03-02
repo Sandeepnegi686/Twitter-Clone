@@ -3,13 +3,9 @@ import useLoginModel from "@/app/_hooks/useLoginModel";
 import { useCallback, useState } from "react";
 import Input from "../Input";
 import Model from "../Model";
-import RegisterModel from "./RegisterModel";
 import useRegisterModel from "@/app/_hooks/useRegisterModel";
 import API_BASE_URL, { api } from "@/app/_lib/api";
-import axios from "axios";
 import toast from "react-hot-toast";
-// import { useAppContext } from "@/app/_context/appContext";
-// import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
 import useUserModel from "@/app/_hooks/useUser";
 import { UserType } from "@/app/types/UserType";
@@ -23,9 +19,7 @@ interface LoginApiResponse {
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
-  // const { currentUser } = getCurrentUser();
   const { setUser } = useUserModel();
-  // const { user, setUser } = useAppContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);

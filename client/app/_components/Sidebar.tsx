@@ -10,22 +10,23 @@ import useUserModel from "../_hooks/useUser";
 import API_BASE_URL from "../_lib/api";
 import { useEffect } from "react";
 
-async function fetchCurrentUser() {
+async function authenticateCurrentUser(): Promise<boolean> {
   try {
     const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
       credentials: "include",
     });
     if (response.status == 401) {
-      localStorage.removeItem("user");
-      return null;
+      return false;
     }
     if (!response.ok) {
       throw new Error(`HTTP server error, Status Code: ${response.status}`);
     }
+    return true;
   } catch (error) {
     const errMsg =
       error instanceof Error ? error.message : "Something went wrong";
     console.log(errMsg);
+    return false;
   }
 }
 
@@ -39,13 +40,18 @@ export default function Sidebar() {
   ];
 
   useEffect(function () {
-    const data = localStorage.getItem("user")
-      ? JSON.parse(localStorage.getItem("user")!)
-      : null;
-    if (data) {
-      setUser(data);
-      fetchCurrentUser();
+    async function checkCurrentUser() {
+      if (await authenticateCurrentUser()) {
+        const data = localStorage.getItem("user")
+          ? JSON.parse(localStorage.getItem("user")!)
+          : null;
+        setUser(data);
+      } else {
+        localStorage.removeItem("user");
+        setUser(null);
+      }
     }
+    checkCurrentUser();
   }, []);
 
   return (
