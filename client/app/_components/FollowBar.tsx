@@ -1,8 +1,28 @@
-import { useUsersModel } from "../_hooks/useUsers";
+import API_BASE_URL from "../_lib/api";
 import Avatar from "./Avatar";
+import { UserType } from "../types/UserType";
 
-export default function FollowBar() {
-  const { users } = useUsersModel();
+export default async function FollowBar() {
+  async function fetchAllUsers(): Promise<UserType[]> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/v1/user/users`);
+      if (!response.ok) {
+        throw new Error(`HTTP server error, Status Code: ${response.status}`);
+      }
+      const data = await response.json();
+      if (data.success) {
+        return data.users;
+      }
+      return [];
+    } catch (error) {
+      const errMsg =
+        error instanceof Error ? error.message : "Something went wrong";
+      console.log(errMsg);
+      return [];
+    }
+  }
+
+  const users = await fetchAllUsers();
   if (users.length === 0) return null;
   return (
     <div className="px-6 py-4 hidden lg:block">
@@ -21,9 +41,9 @@ export default function FollowBar() {
                   </p>
                   <p className="text-neutral-400 text-sm">
                     @
-                    {user?.username.length < 10
+                    {user?.username.length < 8
                       ? (user.username as string)
-                      : `${user.username.slice(0, 9)}..`}
+                      : `${user.username.slice(0, 7)}..`}
                   </p>
                 </div>
               </div>

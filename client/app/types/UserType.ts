@@ -7,7 +7,9 @@ export interface UserType {
   bio?: string;
   image?: string;
   coverImage?: string;
+  coverImagePublicId?: string;
   profileImage?: string;
+  profileImagePublicId?: string;
   followingIds?: string[];
   followersCount?: number;
   hasNotifications?: boolean;

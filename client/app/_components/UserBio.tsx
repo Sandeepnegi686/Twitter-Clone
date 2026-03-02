@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from "react";
+"use client";
+import { useMemo } from "react";
 import useUserModel from "../_hooks/useUser";
 import { UserType } from "../types/UserType";
-import API_BASE_URL from "../_lib/api";
 import { format } from "date-fns";
 import Button from "./Button";
 import { BiCalendar } from "react-icons/bi";
@@ -9,26 +9,17 @@ import useEditModel from "../_hooks/useEditModel";
 
 interface UserBioProps {
   userId: string;
+  fetchedUser: UserType | null;
+  followerCount: number;
 }
 
-export default function UserBio({ userId }: UserBioProps) {
+export default function UserBio({
+  userId,
+  fetchedUser,
+  followerCount,
+}: UserBioProps) {
   const { user } = useUserModel();
   const { onOpen } = useEditModel();
-
-  const [fetchedUser, setFetchedUser] = useState<UserType | null>(null);
-  const [followerCount, setFollowerCount] = useState(0);
-
-  async function fetchUser() {
-    const res = await fetch(`${API_BASE_URL}/api/v1/user/${userId}`);
-    if (!res.ok) throw new Error("HTTP error");
-    const data = await res.json();
-    setFetchedUser(data.user as UserType);
-    setFollowerCount(data.followersCount);
-  }
-
-  useEffect(function () {
-    fetchUser();
-  }, []);
 
   // console.log(fetchedUser);
   const createdAt = useMemo(

@@ -1,5 +1,5 @@
 module.exports = {
   images: {
-    remotePatterns: [new URL("https://res.cloudinary.com/**")],
+    domains: ["res.cloudinary.com", "i.pinimg.com"],
   },
 };

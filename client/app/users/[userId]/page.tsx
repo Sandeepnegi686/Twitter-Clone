@@ -1,26 +1,39 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
-import useSWR from "swr";
 import { ClipLoader } from "react-spinners";
-
 import Header from "@/app/_components/Header";
 import UserBio from "@/app/_components/UserBio";
 import UserHero from "@/app/_components/UserHero";
-import useUserModel from "@/app/_hooks/useUser";
-import { useEffect, useState } from "react";
-import API_BASE_URL from "@/app/_lib/api";
 import { UserType } from "@/app/types/UserType";
+import API_BASE_URL from "@/app/_lib/api";
 
-function Page() {
-  // const userId = params.userId;
-  // console.log(params);
-  // const router = useRouter();
-  const searchParams = useParams();
-  const userId = searchParams?.userId || " ";
-  // console.log(searchParams);
+interface PageProps {
+  params: {
+    userId: string;
+  };
+}
 
-  const { user } = useUserModel();
+async function getUserData(userId: string) {
+  const res = await fetch(`${API_BASE_URL}/api/v1/user/${userId}`, {
+    cache: "no-store", // Ensures SSR (no caching)
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user");
+  }
+
+  return res.json();
+}
+
+export default async function Page({ params }: PageProps) {
+  const { userId } = await params;
+
+  if (!userId) {
+    return <div>User not found</div>;
+  }
+
+  const data = await getUserData(userId);
+
+  const fetchedUser: UserType = data.user;
+  const followerCount: number = data.followersCount;
 
   if (!userId) {
     return (
@@ -32,11 +45,17 @@ function Page() {
 
   return (
     <>
-      <Header label={user?.name} showBackArrow />
-      <UserHero userId={userId as string} />
-      <UserBio userId={userId as string} />
+      <Header showBackArrow />
+      <UserHero
+        userId={userId as string}
+        profileImage={fetchedUser?.profileImage}
+        coverImage={fetchedUser?.coverImage}
+      />
+      <UserBio
+        userId={userId as string}
+        fetchedUser={fetchedUser}
+        followerCount={followerCount}
+      />
     </>
   );
 }
-
-export default Page;

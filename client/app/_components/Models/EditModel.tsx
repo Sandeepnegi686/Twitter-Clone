@@ -28,9 +28,13 @@ export default function EditModel() {
   const [isLoading, setIsLoading] = useState(false);
 
   const [profileImageFile, setProfileImageFile] = useState<File | null>(null);
-  const [profileImagePreview, setProfileImagePreview] = useState<string>("");
+  const [profileImagePreview, setProfileImagePreview] = useState<string>(
+    user?.profileImage!,
+  );
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
-  const [coverImagePreview, setCoverImagePreview] = useState<string>("");
+  const [coverImagePreview, setCoverImagePreview] = useState<string>(
+    user?.coverImage!,
+  );
   const [name, setName] = useState("");
   const [bio, setBio] = useState("");
 
@@ -50,14 +54,16 @@ export default function EditModel() {
       formData.append("bio", bio!);
       if (profileImageFile) formData.append("profileImage", profileImageFile);
       if (coverImageFile) formData.append("coverImage", coverImageFile);
-      const { data } = await api.post<EditUserResponse>(
+      const response = await api.post<EditUserResponse>(
         "/api/v1/user/update-bio",
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },
         },
       );
+      const data = await response.data;
       setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("User updated successfully");
       onClose();
     } catch (error) {
