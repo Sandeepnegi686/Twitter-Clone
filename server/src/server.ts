@@ -6,12 +6,24 @@ import cookieParser from "cookie-parser";
 import authRouter from "./Routes/auth";
 import userRouter from "./Routes/user";
 import { errorHandler } from "./middleware/errorHandler";
-// import "./config/passport";
+// import "./types/express.d.ts";
 
 const app: Express = express();
 const DB = process.env.DB_URL || "";
 const PORT = process.env.PORT || 0;
 const CLIENT_URL = process.env.CLIENT_URL || "";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: {
+        _id: string;
+        name: string;
+        email: string;
+      };
+    }
+  }
+}
 
 //request logger
 app.use(function (req, res, next) {

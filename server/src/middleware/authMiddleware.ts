@@ -9,18 +9,6 @@ interface AuthPayload extends JwtPayload {
   email: string;
 }
 
-declare global {
-  namespace Express {
-    interface Request {
-      user?: {
-        _id: string;
-        name: string;
-        email: string;
-      };
-    }
-  }
-}
-
 function authenticateUser(req: Request, res: Response, next: NextFunction) {
   try {
     const authHeader = req?.cookies?.["access-token"];

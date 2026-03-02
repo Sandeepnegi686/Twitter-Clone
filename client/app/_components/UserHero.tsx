@@ -15,7 +15,12 @@ export default function UserHero({ userId }: UserHeroProps) {
         <Image src={user?.coverImage} fill alt="Cover" objectFit="cover" />
       )}
       <div className="absolute -bottom-16 left-4">
-        <Avatar userId={userId} isLarge hasBorder />
+        <Avatar
+          userId={userId}
+          isLarge
+          hasBorder
+          profileImage={user?.profileImage}
+        />
       </div>
     </div>
   );

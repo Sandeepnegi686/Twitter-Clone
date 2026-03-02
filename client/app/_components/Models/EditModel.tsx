@@ -1,5 +1,4 @@
 "use client";
-import useLoginModel from "@/app/_hooks/useLoginModel";
 import { useCallback, useEffect, useState } from "react";
 import Input from "../Input";
 import Model from "../Model";
@@ -16,14 +15,14 @@ import { UserType } from "@/app/types/UserType";
 import useEditModel from "@/app/_hooks/useEditModel";
 import ImageUpload from "../ImageUpload";
 
-// interface LoginApiResponse {
-//   success: boolean;
-//   message: string;
-//   user?: UserType;
-// }
+interface EditUserResponse {
+  success: boolean;
+  message: string;
+  user: UserType;
+}
 
 export default function EditModel() {
-  const { user } = useUserModel();
+  const { user, setUser } = useUserModel();
   const { onClose, isOpen } = useEditModel();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -32,42 +31,32 @@ export default function EditModel() {
   const [profileImagePreview, setProfileImagePreview] = useState<string>("");
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string>("");
-  const [name, setName] = useState("");
-  const [username, setUsername] = useState("");
-  const [bio, setBio] = useState("");
-
-  useEffect(
-    function () {
-      // setProfileImage(user?.profileImage || "");
-      // setCoverImage(user?.coverImage || "");
-      setName(user?.name || "");
-      setUsername(user?.username || "");
-      setBio(user?.bio || "");
-    },
-    [
-      user?.profileImage,
-      user?.coverImage,
-      user?.name,
-      user?.username,
-      user?.bio,
-    ],
-  );
+  const [name, setName] = useState(user?.name);
+  const [bio, setBio] = useState(user?.bio);
 
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
       const formData = new FormData();
-      formData.append("name", name);
-      formData.append("username", username);
-      formData.append("bio", bio);
+      formData.append("name", name!);
+      formData.append("bio", bio!);
       if (profileImageFile) formData.append("profileImage", profileImageFile);
       if (coverImageFile) formData.append("coverImage", coverImageFile);
-      await api.post("/api/v1/user/update-bio", formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { data } = await api.post<EditUserResponse>(
+        "/api/v1/user/update-bio",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+      setUser(data.user);
+      toast.success("User updated successfully");
       onClose();
     } catch (error) {
-      console.log(error);
+      if (error instanceof Error) {
+        toast.error(error.message);
+        console.log(error);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -100,15 +89,9 @@ export default function EditModel() {
         disabled={isLoading}
       />
       <Input
-        placeholder="Username"
-        type="text"
-        onChange={(e) => setUsername(e.target.value)}
-        disabled={isLoading}
-      />
-      <Input
         placeholder="Bio"
         type="text"
-        onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setBio(e.target.value)}
         disabled={isLoading}
       />
     </div>

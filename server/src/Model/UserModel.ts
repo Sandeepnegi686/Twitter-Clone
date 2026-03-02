@@ -12,7 +12,9 @@ interface UserType {
   bio?: string;
   image?: string;
   coverImage?: string;
+  coverImagePublicId?: string;
   profileImage?: string;
+  profileImagePublicId?: string;
   followingIds?: Types.ObjectId[];
   hasNotifications?: boolean;
 
@@ -35,7 +37,9 @@ const schema = new Schema<UserType, UserModelType, IUserMethods>(
     bio: { type: String },
     image: { type: String },
     coverImage: { type: String },
+    coverImagePublicId: { type: String },
     profileImage: { type: String },
+    profileImagePublicId: { type: String },
     followingIds: { type: Schema.Types.ObjectId, ref: "User" },
     hasNotifications: { type: Boolean },
 

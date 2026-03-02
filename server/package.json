@@ -22,7 +22,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@types/multer": "^2.0.0",
+    "@types/streamifier": "^0.1.2",
     "argon2": "^0.44.0",
+    "cloudinary": "^2.9.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "dotenv": "^17.3.1",
@@ -30,6 +33,8 @@
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.23.0",
-    "nodemon": "^3.1.14"
+    "multer": "^2.0.2",
+    "nodemon": "^3.1.14",
+    "streamifier": "^0.1.1"
   }
 }
