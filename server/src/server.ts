@@ -42,7 +42,7 @@ app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 
 app.use("/api/v1/auth/", authRouter);
 app.use("/api/v1/user/", userRouter);
-app.use("/api/v1/post/", authenticateUser, postRouter);
+app.use("/api/v1/post/", postRouter);
 
 app.use(errorHandler);
 
