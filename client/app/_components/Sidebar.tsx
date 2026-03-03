@@ -36,7 +36,7 @@ export default function Sidebar() {
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
     { label: "Notifications", href: "/notifications", icon: BsBellFill },
-    { label: "Profile", href: "/users/", icon: FaUser },
+    { label: "Profile", href: `/users/${user?._id}`, icon: FaUser },
   ];
 
   useEffect(function () {
