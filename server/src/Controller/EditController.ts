@@ -50,29 +50,30 @@ async function updateBio(req: Request, res: Response) {
     profileImage?: Express.Multer.File[];
     coverImage?: Express.Multer.File[];
   };
-  if (files.profileImage) {
+
+  if (files?.profileImage) {
     if (user.profileImagePublicId)
       await deleteMediaFromCloudinary(user.profileImagePublicId);
     profileImageResult = await uploadMediaToCloudinary(
       files.profileImage[0],
       "users/profileImage",
     );
+    user.profileImage = profileImageResult?.secure_url;
+    user.profileImagePublicId = profileImageResult?.public_id;
   }
-  if (files.coverImage) {
+  if (files?.coverImage) {
     if (user.coverImagePublicId)
       await deleteMediaFromCloudinary(user.coverImagePublicId);
     coverImageResult = await uploadMediaToCloudinary(
       files.coverImage[0],
       "users/coverImage",
     );
+    user.coverImage = coverImageResult?.secure_url;
+    user.coverImagePublicId = coverImageResult?.public_id;
   }
 
   user.name = name;
   user.bio = bio;
-  user.profileImage = profileImageResult?.secure_url;
-  user.profileImagePublicId = profileImageResult?.public_id;
-  user.coverImage = coverImageResult?.secure_url;
-  user.coverImagePublicId = coverImageResult?.public_id;
 
   await user.save();
 
