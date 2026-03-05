@@ -6,7 +6,9 @@ import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import Avatar from "../Avatar";
-import { AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
+import API_BASE_URL from "@/app/_lib/api";
+import toast from "react-hot-toast";
 
 interface PostItemProps {
   post: PostType;
@@ -31,12 +33,45 @@ export default function PostItem({ post }: PostItemProps) {
   }, [router, post._id]);
 
   const onLike = useCallback(
-    (event: any) => {
+    async (event: any) => {
       event.stopPropagation();
-
-      loginModel.onOpen();
+      if (!user) {
+        loginModel.onOpen();
+        return;
+      }
+      if (hasLiked) {
+        const res = await fetch(`${API_BASE_URL}/api/v1/post/un-like-post`, {
+          method: "DELETE",
+          credentials: "include",
+          body: JSON.stringify({ postId: post._id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.error);
+          return;
+        }
+        post.likedId = post.likedId?.filter((ids) => ids !== user._id);
+      } else {
+        const res = await fetch(`${API_BASE_URL}/api/v1/post/like-post`, {
+          method: "PUT",
+          credentials: "include",
+          body: JSON.stringify({ postId: post._id }),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const data = await res.json();
+        if (!data.success) {
+          toast.error(data.error);
+          return;
+        }
+        post.likedId = post.likedId?.filter((ids) => ids !== user._id);
+      }
     },
-    [loginModel],
+    [loginModel.isOpen, post._id, user?._id, post.likedId],
   );
 
   const createdAt = useMemo(
@@ -47,6 +82,14 @@ export default function PostItem({ post }: PostItemProps) {
       return formatDistanceToNowStrict(new Date(post?.createdAt));
     },
     [post?.createdAt],
+  );
+  const hasLiked = useMemo(
+    function () {
+      if (!user) return false;
+      if (post.likedId?.includes(user?._id)) return true;
+      return false;
+    },
+    [user?._id, post.likedId?.length, loginModel.isOpen, onLike],
   );
 
   return (
@@ -85,7 +128,11 @@ export default function PostItem({ post }: PostItemProps) {
               className="flex items-center text-neutral-500 gap-2 cursor-pointer transition hover:text-red-500"
               onClick={onLike}
             >
-              <AiOutlineHeart size={20} />
+              {hasLiked ? (
+                <AiFillHeart size={20} color="red" />
+              ) : (
+                <AiOutlineHeart size={20} />
+              )}
               <p>{post.likedId?.length || 0}</p>
             </div>
           </div>
