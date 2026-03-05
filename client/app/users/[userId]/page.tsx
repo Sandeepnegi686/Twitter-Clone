@@ -4,6 +4,7 @@ import UserBio from "@/app/_components/UserBio";
 import UserHero from "@/app/_components/UserHero";
 import { UserType } from "@/app/types/UserType";
 import API_BASE_URL from "@/app/_lib/api";
+import PostFeed from "@/app/_components/posts/PostFeed";
 
 interface PageProps {
   params: {
@@ -56,6 +57,7 @@ export default async function Page({ params }: PageProps) {
         fetchedUser={fetchedUser}
         followersCount={followersCount}
       />
+      <PostFeed userId={userId} />
     </>
   );
 }
