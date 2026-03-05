@@ -10,13 +10,13 @@ import useEditModel from "../_hooks/useEditModel";
 interface UserBioProps {
   userId: string;
   fetchedUser: UserType | null;
-  followerCount: number;
+  followersCount: number;
 }
 
 export default function UserBio({
   userId,
   fetchedUser,
-  followerCount,
+  followersCount,
 }: UserBioProps) {
   const { user } = useUserModel();
   const { onOpen } = useEditModel();
@@ -56,15 +56,13 @@ export default function UserBio({
         </div>
         <div className="flex items-center mt-4 gap-6">
           <div className="flex items-center gap-1">
-            <p className="text-white">
-              {fetchedUser?.followingIds?.length || 0}
-            </p>
+            <p className="text-white">{fetchedUser?.followingIds?.length}</p>
             <p className="text-neutral-500">Following</p>
           </div>
         </div>
         <div className="flex items-center mt-4 gap-6">
           <div className="flex items-center gap-1">
-            <p className="text-white">{followerCount}</p>
+            <p className="text-white">{followersCount || 0}</p>
             <p className="text-neutral-500">Followers</p>
           </div>
         </div>

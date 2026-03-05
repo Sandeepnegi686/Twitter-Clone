@@ -40,7 +40,7 @@ const schema = new Schema<UserType, UserModelType, IUserMethods>(
     coverImagePublicId: { type: String },
     profileImage: { type: String },
     profileImagePublicId: { type: String },
-    followingIds: { type: Schema.Types.ObjectId, ref: "User" },
+    followingIds: [{ type: Schema.Types.ObjectId, ref: "User" }],
     hasNotifications: { type: Boolean },
 
     posts: [{ type: Schema.Types.ObjectId, ref: "Post" }],

@@ -22,12 +22,14 @@ async function getUserById(req: Request<{ id: string }>, res: Response) {
   if (!req.params.id || !Types.ObjectId.isValid(req.params.id)) {
     return res.status(400).json({ success: false, message: "id is invalid" });
   }
-  const user = await UserModel.findById(req.params.id);
-  const followersCount = await UserModel.countDocuments({
-    followingIds: req.params.id,
-  });
+  const userId = new Types.ObjectId(req.params.id);
+  const user = await UserModel.findById(userId);
   if (!user)
     return res.status(400).json({ success: false, message: "user not found" });
+  const followersCount = await UserModel.countDocuments({
+    followingIds: userId,
+  });
+  console.log(`followersCount of Id ${userId}`, followersCount);
   return res.status(200).json({ success: true, user, followersCount });
 }
 
@@ -82,4 +84,40 @@ async function updateBio(req: Request, res: Response) {
     .json({ success: true, message: "Data updated successfully", user });
 }
 
-export { updateBio, getUserById };
+async function followUser(
+  req: Request<{}, {}, { userId: string }>,
+  res: Response,
+) {
+  const userId = req.body?.userId;
+  if (!userId || !Types.ObjectId.isValid(userId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "userId is not present" });
+  }
+  const updatedUser = UserModel.findByIdAndUpdate(
+    req.user?._id,
+    { $addToSet: { followingIds: userId } },
+    { new: true },
+  );
+  return res.status(200).json({ success: true, user: updatedUser });
+}
+
+async function unFollowUser(
+  req: Request<{}, {}, { userId: string }>,
+  res: Response,
+) {
+  const userId = req.body?.userId;
+  if (!userId || !Types.ObjectId.isValid(userId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "userId is not present" });
+  }
+  const updatedUser = UserModel.findByIdAndUpdate(
+    req.user?._id,
+    { $pull: { followingIds: new Types.ObjectId(req.user?._id) } },
+    { new: true },
+  );
+  return res.status(200).json({ success: true, user: updatedUser });
+}
+
+export { updateBio, getUserById, followUser, unFollowUser };

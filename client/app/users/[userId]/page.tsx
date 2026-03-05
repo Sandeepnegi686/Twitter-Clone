@@ -33,7 +33,7 @@ export default async function Page({ params }: PageProps) {
   const data = await getUserData(userId);
 
   const fetchedUser: UserType = data.user;
-  const followerCount: number = data.followersCount;
+  const followersCount: number = data.followersCount;
 
   if (!userId) {
     return (
@@ -54,7 +54,7 @@ export default async function Page({ params }: PageProps) {
       <UserBio
         userId={userId as string}
         fetchedUser={fetchedUser}
-        followerCount={followerCount}
+        followersCount={followersCount}
       />
     </>
   );

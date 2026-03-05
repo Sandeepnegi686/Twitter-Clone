@@ -1,6 +1,11 @@
 import express, { Request, Response } from "express";
 import UserModel from "../Model/UserModel";
-import { getUserById, updateBio } from "../Controller/EditController";
+import {
+  followUser,
+  getUserById,
+  unFollowUser,
+  updateBio,
+} from "../Controller/UserController";
 import upload from "../config/multer";
 import authenticateUser from "../middleware/authMiddleware";
 
@@ -12,6 +17,10 @@ router.get("/users", async (req: Request, res: Response) => {
 });
 
 router.post("/update-bio", authenticateUser, upload, updateBio);
+
+router.put("/follow-user", followUser);
+
+router.delete("/follow-user", unFollowUser);
 
 router.get("/:id", getUserById);
 
