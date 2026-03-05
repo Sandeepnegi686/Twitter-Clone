@@ -5,13 +5,13 @@ import PostItem from "./PostItem";
 interface PostFeedProps {
   userId?: string;
 }
-interface GETPOSTAPIRESPONSE {
+interface GET_POST_API_RESPONSE {
   success: boolean;
   posts: PostType[];
 }
 
 export default async function PostFeed({ userId }: PostFeedProps) {
-  const { data } = await api.get<GETPOSTAPIRESPONSE>(
+  const { data } = await api.get<GET_POST_API_RESPONSE>(
     userId ? `/api/v1/post/getPosts/${userId}` : "/api/v1/post/getPosts/",
   );
   const posts = data.posts;

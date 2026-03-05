@@ -8,7 +8,7 @@ import authRouter from "./Routes/auth";
 import userRouter from "./Routes/user";
 import postRouter from "./Routes/post";
 import { errorHandler } from "./middleware/errorHandler";
-import authenticateUser from "./middleware/authMiddleware";
+// import authenticateUser from "./middleware/authMiddleware";
 // import "./types/express.d.ts";
 
 const app: Express = express();

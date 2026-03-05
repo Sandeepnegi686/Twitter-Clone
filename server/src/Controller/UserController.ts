@@ -29,7 +29,6 @@ async function getUserById(req: Request<{ id: string }>, res: Response) {
   const followersCount = await UserModel.countDocuments({
     followingIds: userId,
   });
-  console.log(`followersCount of Id ${userId}`, followersCount);
   return res.status(200).json({ success: true, user, followersCount });
 }
 
@@ -88,17 +87,19 @@ async function followUser(
   req: Request<{}, {}, { userId: string }>,
   res: Response,
 ) {
+  console.log(req.body);
   const userId = req.body?.userId;
   if (!userId || !Types.ObjectId.isValid(userId)) {
     return res
       .status(400)
       .json({ success: false, message: "userId is not present" });
   }
-  const updatedUser = UserModel.findByIdAndUpdate(
+  const updatedUser = await UserModel.findByIdAndUpdate(
     req.user?._id,
     { $addToSet: { followingIds: userId } },
     { new: true },
   );
+
   return res.status(200).json({ success: true, user: updatedUser });
 }
 
@@ -112,9 +113,9 @@ async function unFollowUser(
       .status(400)
       .json({ success: false, message: "userId is not present" });
   }
-  const updatedUser = UserModel.findByIdAndUpdate(
+  const updatedUser = await UserModel.findByIdAndUpdate(
     req.user?._id,
-    { $pull: { followingIds: new Types.ObjectId(req.user?._id) } },
+    { $pull: { followingIds: userId } },
     { new: true },
   );
   return res.status(200).json({ success: true, user: updatedUser });

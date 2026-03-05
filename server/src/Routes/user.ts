@@ -18,9 +18,9 @@ router.get("/users", async (req: Request, res: Response) => {
 
 router.post("/update-bio", authenticateUser, upload, updateBio);
 
-router.put("/follow-user", followUser);
+router.put("/follow-user", authenticateUser, followUser);
 
-router.delete("/follow-user", unFollowUser);
+router.delete("/follow-user", authenticateUser, unFollowUser);
 
 router.get("/:id", getUserById);
 

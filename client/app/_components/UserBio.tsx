@@ -1,27 +1,35 @@
 "use client";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import useUserModel from "../_hooks/useUser";
 import { UserType } from "../types/UserType";
 import { format } from "date-fns";
 import Button from "./Button";
 import { BiCalendar } from "react-icons/bi";
 import useEditModel from "../_hooks/useEditModel";
+import useLoginModel from "../_hooks/useLoginModel";
+import API_BASE_URL, { api } from "../_lib/api";
+import toast from "react-hot-toast";
 
 interface UserBioProps {
   userId: string;
   fetchedUser: UserType | null;
   followersCount: number;
 }
+type FollowUnfollowResponse = {
+  success: boolean;
+  message: string;
+  user: UserType;
+};
 
 export default function UserBio({
   userId,
   fetchedUser,
   followersCount,
 }: UserBioProps) {
-  const { user } = useUserModel();
+  const { user, setUser } = useUserModel();
   const { onOpen } = useEditModel();
+  const loginModel = useLoginModel();
 
-  // console.log(fetchedUser);
   const createdAt = useMemo(
     function () {
       if (!fetchedUser?.createdAt) {
@@ -31,13 +39,76 @@ export default function UserBio({
     },
     [fetchedUser?.createdAt],
   );
+
+  const isFollowing = useMemo(
+    function () {
+      if (user) {
+        const isFollowing = user.followingIds?.some((id) => id === userId);
+        return isFollowing;
+      }
+    },
+    [user?.followingIds, userId],
+  );
+
+  const handleFollow = useCallback(async () => {
+    if (!user) {
+      loginModel.onOpen();
+      return;
+    }
+    if (isFollowing) {
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
+        body: JSON.stringify({ userId }),
+        method: "DELETE",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success("Unfollowed");
+      setUser(data.user!);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    } else {
+      // const { data } = await api.put<FollowUnfollowResponse>(
+      //   `${API_BASE_URL}/api/v1/user/follow-user`,
+      //   {
+      //     userId,
+      //   },
+      // );
+      const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
+        body: JSON.stringify({ userId }),
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await res.json();
+      if (!data.success) {
+        toast.error(data.message);
+        return;
+      }
+      toast.success("Followed");
+      setUser(data.user);
+      localStorage.setItem("user", JSON.stringify(data.user));
+    }
+  }, [user, isFollowing, userId, loginModel]);
+
   return (
     <div className="border-b border-neutral-800 pb-4">
       <div className="flex justify-end p-2">
         {user?._id === userId ? (
           <Button secondary label="Edit" onClick={() => onOpen()} />
         ) : (
-          <Button onClick={() => {}} label="Follow" secondary />
+          <Button
+            onClick={handleFollow}
+            label={isFollowing ? "UnFollow" : "Follow"}
+            secondary
+          />
         )}
       </div>
       <div className="mt-8 px-4">

@@ -20,7 +20,7 @@ async function createPost(
 }
 
 async function getPost(req: Request<{ userId: string }>, res: Response) {
-  const userId = req.params.userId;
+  const userId = req?.params?.userId;
   if (userId) {
     const posts = await PostModel.find({ userId })
       .populate("userId")
