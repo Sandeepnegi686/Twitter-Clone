@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import PostModel from "../Model/PostModel";
 import UserModel from "../Model/UserModel";
+import { Types } from "mongoose";
 
 async function createPost(
   req: Request<{}, {}, { body: string }>,
@@ -19,7 +20,7 @@ async function createPost(
     .json({ success: true, message: "Post is created", post });
 }
 
-async function getPost(req: Request<{ userId: string }>, res: Response) {
+async function getPosts(req: Request<{ userId: string }>, res: Response) {
   const userId = req?.params?.userId;
   if (userId) {
     const posts = await PostModel.find({ userId })
@@ -33,4 +34,58 @@ async function getPost(req: Request<{ userId: string }>, res: Response) {
   return res.status(200).json({ success: true, posts });
 }
 
-export { createPost, getPost };
+async function getPostById(req: Request<{ postId: string }>, res: Response) {
+  const postId = req.params.postId;
+  if (!postId || !Types.ObjectId.isValid(postId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "post id is not defined" });
+  }
+  const post = await PostModel.findById(postId).populate("userId");
+  if (!post) {
+    return res
+      .status(400)
+      .json({ success: false, message: "post id is invalid" });
+  }
+  return res.status(200).json({ success: true, post });
+}
+
+async function likePost(
+  req: Request<{}, {}, { postId: string }>,
+  res: Response,
+) {
+  const postId = req.body?.postId;
+  if (!postId || !Types.ObjectId.isValid(postId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "postId is not present" });
+  }
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    postId,
+    { $addToSet: { likedId: req.user?._id } },
+    { new: true },
+  );
+
+  return res.status(200).json({ success: true, post: updatedPost });
+}
+
+async function unLikePost(
+  req: Request<{}, {}, { postId: string }>,
+  res: Response,
+) {
+  const postId = req.body?.postId;
+  if (!postId || !Types.ObjectId.isValid(postId)) {
+    return res
+      .status(400)
+      .json({ success: false, message: "postId is not present" });
+  }
+  const updatedPost = await PostModel.findByIdAndUpdate(
+    postId,
+    { $pull: { likedId: req.user?._id } },
+    { new: true },
+  );
+
+  return res.status(200).json({ success: true, post: updatedPost });
+}
+
+export { createPost, getPosts, getPostById, likePost, unLikePost };

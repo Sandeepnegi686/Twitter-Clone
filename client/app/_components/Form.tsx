@@ -53,7 +53,10 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       {user ? (
         <div className="flex gap4">
           <div>
-            <Avatar userId={user?._id} />
+            <Avatar
+              userId={user?._id}
+              profileImage={user?.profileImage || ""}
+            />
           </div>
           <div className="w-full">
             <textarea
