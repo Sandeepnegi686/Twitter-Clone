@@ -1,7 +1,7 @@
 "use client";
 import { CommentType } from "@/app/types/CommentType";
 import { UserType } from "@/app/types/UserType";
-import { formatDistanceToNow, formatDistanceToNowStrict } from "date-fns";
+import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import Avatar from "../Avatar";
@@ -16,7 +16,6 @@ export default function CommentItem({ comment }: CommentItemType) {
   const goToUser = useCallback(
     function (event: any) {
       event.stopPropagation();
-
       router.push(`/users/${(comment.userId as UserType)._id}`);
     },
     [router, (comment.userId as UserType)._id],
@@ -48,6 +47,7 @@ export default function CommentItem({ comment }: CommentItemType) {
             </span>
             <span className="text-neutral-500 text-sm">{createdAt}</span>
           </div>
+          <div className="text-white mt-1">{comment.body}</div>
         </div>
       </div>
     </div>

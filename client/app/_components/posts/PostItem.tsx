@@ -53,6 +53,7 @@ export default function PostItem({ post }: PostItemProps) {
           toast.error(data.error);
           return;
         }
+        toast.success("unLiked");
         post.likedId = post.likedId?.filter((ids) => ids !== user._id);
       } else {
         const res = await fetch(`${API_BASE_URL}/api/v1/post/like-post`, {
@@ -68,6 +69,7 @@ export default function PostItem({ post }: PostItemProps) {
           toast.error(data.error);
           return;
         }
+        toast.success("Liked");
         post.likedId = post.likedId?.filter((ids) => ids !== user._id);
       }
     },
