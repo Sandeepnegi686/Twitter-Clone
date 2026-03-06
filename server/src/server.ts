@@ -7,9 +7,9 @@ import cookieParser from "cookie-parser";
 import authRouter from "./Routes/auth";
 import userRouter from "./Routes/user";
 import postRouter from "./Routes/post";
+import commentRouter from "./Routes/comment";
 import { errorHandler } from "./middleware/errorHandler";
-// import authenticateUser from "./middleware/authMiddleware";
-// import "./types/express.d.ts";
+import authenticateUser from "./middleware/authMiddleware";
 
 const app: Express = express();
 const DB = process.env.DB_URL || "";
@@ -43,6 +43,7 @@ app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 app.use("/api/v1/auth/", authRouter);
 app.use("/api/v1/user/", userRouter);
 app.use("/api/v1/post/", postRouter);
+app.use("/api/v1/comment/", authenticateUser, commentRouter);
 
 app.use(errorHandler);
 

@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import mongoose from "mongoose";
 
 class APIError extends Error {
   statusCode: number;
@@ -14,7 +15,14 @@ function errorHandler(
   res: Response,
   next: NextFunction,
 ) {
-  console.log(err.message);
+  if (err instanceof mongoose.Error.ValidationError) {
+    const errors = Object.values(err.errors).map((el: any) => el.message);
+
+    return res.status(400).json({
+      success: false,
+      message: errors[0],
+    });
+  }
   return res
     .status(err.statusCode || 500)
     .json({ success: false, messsage: err.message });

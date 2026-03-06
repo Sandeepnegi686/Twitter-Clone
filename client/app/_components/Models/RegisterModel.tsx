@@ -65,7 +65,7 @@ export default function RegisterModel() {
         setIsLoading(false);
       }
     },
-    [registerModel],
+    [registerModel.isOpen, name, username, email, password],
   );
 
   const bodyContent = (

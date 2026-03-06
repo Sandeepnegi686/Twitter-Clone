@@ -1,7 +1,9 @@
 import Form from "@/app/_components/Form";
 import Header from "@/app/_components/Header";
+import CommentFeed from "@/app/_components/posts/CommentFeed";
 import PostItem from "@/app/_components/posts/PostItem";
 import API_BASE_URL from "@/app/_lib/api";
+import { CommentType } from "@/app/types/CommentType";
 import { PostType } from "@/app/types/PostType";
 import toast from "react-hot-toast";
 
@@ -24,12 +26,14 @@ export default async function Page({
   const { postId } = await params;
 
   const post = (await fetchPost(postId)) as PostType;
+  // console.log(post);
 
   return (
     <>
       <Header label="Tweet" showBackArrow />
       <PostItem post={post} />
       <Form postId={post._id} isComment placeholder="Tweet your reply" />
+      <CommentFeed comments={post.comments as CommentType[]} />
     </>
   );
 }

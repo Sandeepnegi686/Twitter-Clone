@@ -1,6 +1,7 @@
 import { Model, model, Schema } from "mongoose";
 import { APIError } from "../middleware/errorHandler";
 import argon2 from "argon2";
+import validator from "validator";
 import { Types } from "mongoose";
 
 interface UserType {
@@ -31,7 +32,15 @@ const schema = new Schema<UserType, UserModelType, IUserMethods>(
   {
     name: { type: String, required: true },
     username: { type: String, required: true, unique: true },
-    email: { type: String, unique: true, required: true },
+    email: {
+      type: String,
+      validate: {
+        validator: (value: string) => validator.isEmail(value),
+        message: (props) => `${props.value} is not a valid email!`,
+      },
+      required: [true, "Please provide email"],
+      unique: true,
+    },
     hashedPassword: { type: String, required: true, select: false },
     emailVarified: { type: Date },
     bio: { type: String },

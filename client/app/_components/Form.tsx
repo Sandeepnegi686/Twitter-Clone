@@ -8,11 +8,17 @@ import { api } from "../_lib/api";
 import { PostType } from "../types/PostType";
 import Button from "./Button";
 import Avatar from "./Avatar";
+import { CommentType } from "../types/CommentType";
 
 interface PostCreateResponse {
   success: boolean;
   message: string;
   post?: PostType;
+}
+interface CommentResponseType {
+  success: boolean;
+  message: string;
+  comment?: CommentType;
 }
 
 interface FormProps {
@@ -31,14 +37,26 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
   const onSubmit = useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data } = await api.post<PostCreateResponse>(
-        "/api/v1/post/create",
-        { body },
-      );
-      if (data.success) {
-        toast.success("Post created");
+      if (isComment) {
+        const { data } = await api.post<CommentResponseType>(
+          "/api/v1/comment/create",
+          { body, postId },
+        );
+        if (data.success) {
+          toast.success("Comment created");
+        } else {
+          toast.error(data.message);
+        }
       } else {
-        toast.error(data.message);
+        const { data } = await api.post<PostCreateResponse>(
+          "/api/v1/post/create",
+          { body },
+        );
+        if (data.success) {
+          toast.success("Post created");
+        } else {
+          toast.error(data.message);
+        }
       }
       setBody("");
     } catch (error) {
@@ -46,7 +64,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [body]);
+  }, [body, isComment, postId]);
 
   return (
     <div className="border-b border-neutral-800 px-5 py-2">

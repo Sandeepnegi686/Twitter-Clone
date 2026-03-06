@@ -1,3 +1,4 @@
+import { CommentType } from "./CommentType";
 import { UserType } from "./UserType";
 
 export interface PostType {
@@ -5,7 +6,7 @@ export interface PostType {
   body: string;
   userId: UserType;
   likedId?: string[];
-  comments?: string[];
+  comments?: string[] | CommentType[];
   createdAt: Date;
   updatedAt: Date;
 }

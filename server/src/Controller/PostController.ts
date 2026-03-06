@@ -41,7 +41,9 @@ async function getPostById(req: Request<{ postId: string }>, res: Response) {
       .status(400)
       .json({ success: false, message: "post id is not defined" });
   }
-  const post = await PostModel.findById(postId).populate("userId");
+  const post = await PostModel.findById(postId)
+    .populate("userId")
+    .populate("comments");
   if (!post) {
     return res
       .status(400)

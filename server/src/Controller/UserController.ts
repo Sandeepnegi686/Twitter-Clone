@@ -87,7 +87,7 @@ async function followUser(
   req: Request<{}, {}, { userId: string }>,
   res: Response,
 ) {
-  console.log(req.body);
+  // console.log(req.body);
   const userId = req.body?.userId;
   if (!userId || !Types.ObjectId.isValid(userId)) {
     return res

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 // import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
@@ -15,7 +15,11 @@ interface LoginRequestBodyType {
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
 
-async function signUp(req: Request<{}, {}, SignUpType, {}>, res: Response) {
+async function signUp(
+  req: Request<{}, {}, SignUpType, {}>,
+  res: Response,
+  next: NextFunction,
+) {
   try {
     const { error } = registerValidation(req.body);
     if (error)
@@ -60,9 +64,10 @@ async function signUp(req: Request<{}, {}, SignUpType, {}>, res: Response) {
     });
   } catch (error) {
     console.log(error);
-    return res
-      .status(500)
-      .json({ s: false, m: "something went wrong on the server" });
+    next(error);
+    // return res
+    //   .status(500)
+    //   .json({ s: false, m: "something went wrong on the server" });
   }
 }
 
