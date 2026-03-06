@@ -9,6 +9,7 @@ import Avatar from "../Avatar";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import API_BASE_URL from "@/app/_lib/api";
 import toast from "react-hot-toast";
+import { sendNotification } from "@/app/_lib/sendNotification";
 
 interface PostItemProps {
   post: PostType;
@@ -71,6 +72,10 @@ export default function PostItem({ post }: PostItemProps) {
         }
         toast.success("Liked");
         post.likedId = post.likedId?.filter((ids) => ids !== user._id);
+        await sendNotification(
+          `${user.name} liked your tweet`,
+          post.userId._id,
+        );
       }
     },
     [loginModel.isOpen, post._id, user?._id, post.likedId],

@@ -35,7 +35,12 @@ export default function Sidebar() {
   const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
-    { label: "Notifications", href: "/notifications", icon: BsBellFill },
+    {
+      label: "Notifications",
+      href: "/notifications",
+      icon: BsBellFill,
+      alert: user?.hasNotifications,
+    },
     { label: "Profile", href: `/users/${user?._id}`, icon: FaUser },
   ];
 
@@ -65,6 +70,7 @@ export default function Sidebar() {
               href={item.href}
               label={item.label}
               icon={item.icon}
+              alert={item?.alert}
             />
           ))}
           {user && (

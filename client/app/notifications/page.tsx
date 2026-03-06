@@ -1,5 +1,12 @@
 import React from "react";
+import Header from "../_components/Header";
+import NotificationsFeed from "../_components/NotificationsFeed";
 
 export default function Page() {
-  return <div className="text-6xl text-red-500">Notifications</div>;
+  return (
+    <>
+      <Header label="Notifications" />
+      <NotificationsFeed />
+    </>
+  );
 }

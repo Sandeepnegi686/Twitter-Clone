@@ -8,6 +8,7 @@ import authRouter from "./Routes/auth";
 import userRouter from "./Routes/user";
 import postRouter from "./Routes/post";
 import commentRouter from "./Routes/comment";
+import notificationRouter from "./Routes/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
 
@@ -44,6 +45,7 @@ app.use("/api/v1/auth/", authRouter);
 app.use("/api/v1/user/", userRouter);
 app.use("/api/v1/post/", postRouter);
 app.use("/api/v1/comment/", commentRouter);
+app.use("/api/v1/notification/", authenticateUser, notificationRouter);
 
 app.use(errorHandler);
 
