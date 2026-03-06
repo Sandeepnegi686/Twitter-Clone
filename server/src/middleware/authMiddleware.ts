@@ -12,6 +12,7 @@ interface AuthPayload extends JwtPayload {
 function authenticateUser(req: Request, res: Response, next: NextFunction) {
   try {
     const authHeader = req?.cookies?.["access-token"];
+    console.log(authHeader);
     if (!authHeader) {
       return res.status(401).json({ s: false, m: "unauthorized" });
     }

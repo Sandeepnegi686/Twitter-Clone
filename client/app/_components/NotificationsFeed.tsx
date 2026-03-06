@@ -1,9 +1,22 @@
 import { BsTwitter } from "react-icons/bs";
 import { NotificationsType } from "../types/NotificationsType";
-import API_BASE_URL from "../_lib/api";
+import API_BASE_URL, { api } from "../_lib/api";
 
 export default async function NotificationsFeed() {
-  const fetchedNotifications: NotificationsType[] = await fetchNotifications();
+  // const fetchedNotifications: NotificationsType[] = await fetchNotifications();
+  // const res = await fetch(
+  //   `${API_BASE_URL}/api/v1/notification/get-notification-by-user`,
+  //   {
+  //     method: "GET",
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //   },
+  // );
+  // console.log(res);
+  // const data = await res.json();
+  const fetchedNotifications = [];
 
   if (fetchedNotifications.length == 0) {
     return (
@@ -24,15 +37,4 @@ export default async function NotificationsFeed() {
       })}
     </div>
   );
-}
-async function fetchNotifications() {
-  const res = await fetch(
-    `${API_BASE_URL}/api/v1/notification/get-notification-by-user`,
-    {
-      credentials: "include",
-    },
-  );
-  console.log(res);
-  const data = await res.json();
-  return data.notifications ?? [];
 }
