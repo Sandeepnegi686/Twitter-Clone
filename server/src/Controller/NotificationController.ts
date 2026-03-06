@@ -26,9 +26,7 @@ async function createNotification(
 
 async function getNotificationByUser(req: Request, res: Response) {
   const userId = req.user?._id;
-  console.log("code run ");
   const notifications = await NotificationsModel.find({ userId });
-  console.log(notifications);
   return res.status(200).json({ success: true, notifications });
 }
 

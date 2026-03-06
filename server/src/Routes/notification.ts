@@ -8,7 +8,7 @@ import {
 const router = express.Router();
 
 router.post("/create", createNotification);
-router.get("/getNotificationByUser", getNotificationByUser);
+router.get("/get-notification-by-user", getNotificationByUser);
 router.get("/clearNotification", clearNotification);
 
 export default router;

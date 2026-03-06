@@ -27,11 +27,12 @@ export default async function NotificationsFeed() {
 }
 async function fetchNotifications() {
   const res = await fetch(
-    `${API_BASE_URL}/api/v1/notification/getNotificationByUser`,
+    `${API_BASE_URL}/api/v1/notification/get-notification-by-user`,
     {
       credentials: "include",
     },
   );
+  console.log(res);
   const data = await res.json();
   return data.notifications ?? [];
 }
