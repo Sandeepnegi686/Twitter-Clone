@@ -9,6 +9,7 @@ import useEditModel from "../_hooks/useEditModel";
 import useLoginModel from "../_hooks/useLoginModel";
 import API_BASE_URL, { api } from "../_lib/api";
 import toast from "react-hot-toast";
+import { sendNotification } from "../_lib/sendNotification";
 
 interface UserBioProps {
   userId: string;
@@ -73,12 +74,6 @@ export default function UserBio({
       setUser(data.user!);
       localStorage.setItem("user", JSON.stringify(data.user));
     } else {
-      // const { data } = await api.put<FollowUnfollowResponse>(
-      //   `${API_BASE_URL}/api/v1/user/follow-user`,
-      //   {
-      //     userId,
-      //   },
-      // );
       const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
         body: JSON.stringify({ userId }),
         method: "PUT",
@@ -95,6 +90,7 @@ export default function UserBio({
       toast.success("Followed");
       setUser(data.user);
       localStorage.setItem("user", JSON.stringify(data.user));
+      await sendNotification(`${user.name} followed you`, userId);
     }
   }, [user, isFollowing, userId, loginModel]);
 

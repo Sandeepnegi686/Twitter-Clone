@@ -31,11 +31,12 @@ async function getNotificationByUser(req: Request, res: Response) {
 }
 
 async function clearNotification(req: Request, res: Response) {
-  //   const userId = req.user?._id;
-  //   const notification = await NotificationsModel.find({ userId });
-  //   return res
-  //     .status(201)
-  //     .json({ success: true, message: "Notification is created", notification });
+  const userId = req.user?._id;
+  await NotificationsModel.deleteMany({ userId });
+  await UserModel.findByIdAndUpdate(userId, { hasNotifications: false });
+  return res
+    .status(200)
+    .json({ success: true, message: "Notification deleted" });
 }
 
 export { createNotification, getNotificationByUser, clearNotification };

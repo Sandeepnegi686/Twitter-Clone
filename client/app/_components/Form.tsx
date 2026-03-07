@@ -9,6 +9,8 @@ import { PostType } from "../types/PostType";
 import Button from "./Button";
 import Avatar from "./Avatar";
 import { CommentType } from "../types/CommentType";
+import { sendNotification } from "../_lib/sendNotification";
+import { UserType } from "../types/UserType";
 
 interface PostCreateResponse {
   success: boolean;
@@ -24,10 +26,10 @@ interface CommentResponseType {
 interface FormProps {
   placeholder: string;
   isComment?: boolean;
-  postId?: string;
+  post?: PostType;
 }
 
-export default function Form({ placeholder, isComment, postId }: FormProps) {
+export default function Form({ placeholder, isComment, post }: FormProps) {
   const registerModal = useRegisterModel();
   const loginModel = useLoginModel();
   const { user } = useUserModel();
@@ -40,10 +42,14 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
       if (isComment) {
         const { data } = await api.post<CommentResponseType>(
           "/api/v1/comment/create",
-          { body, postId },
+          { body, postId: post?._id },
         );
         if (data.success) {
           toast.success("Comment created");
+          await sendNotification(
+            `${user!.name} liked your tweet`,
+            (post?.userId as UserType)._id,
+          );
         } else {
           toast.error(data.message);
         }
@@ -64,7 +70,7 @@ export default function Form({ placeholder, isComment, postId }: FormProps) {
     } finally {
       setIsLoading(false);
     }
-  }, [body, isComment, postId]);
+  }, [body, isComment, post?._id]);
 
   return (
     <div className="border-b border-neutral-800 px-5 py-2">

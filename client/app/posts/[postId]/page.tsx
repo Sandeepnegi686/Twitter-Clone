@@ -21,7 +21,7 @@ export default async function Page({
     <>
       <Header label="Tweet" showBackArrow />
       <PostItem post={post} />
-      <Form postId={post._id} isComment placeholder="Tweet your reply" />
+      <Form post={post} isComment placeholder="Tweet your reply" />
       <CommentFeed comments={comments} />
     </>
   );
