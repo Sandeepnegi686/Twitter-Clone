@@ -33,7 +33,7 @@ async function getCommentsByPost(
   const comments = await CommentModel.find({ postId }).populate("userId").sort({
     createdAt: "desc",
   });
-  return res.status(201).json({ success: true, comments });
+  return res.status(200).json({ success: true, comments });
 }
 
 export { createComment, getCommentsByPost };

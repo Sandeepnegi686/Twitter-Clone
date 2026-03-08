@@ -6,32 +6,12 @@ import SidebarItem from "./SidebarItem";
 import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
 import { useRouter } from "next/navigation";
-import useUserModel from "../_hooks/useUser";
-import API_BASE_URL from "../_lib/api";
-import { useEffect } from "react";
-
-async function authenticateCurrentUser(): Promise<boolean> {
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
-      credentials: "include",
-    });
-    if (response.status == 401) {
-      return false;
-    }
-    if (!response.ok) {
-      throw new Error(`HTTP server error, Status Code: ${response.status}`);
-    }
-    return true;
-  } catch (error) {
-    const errMsg =
-      error instanceof Error ? error.message : "Something went wrong";
-    console.log(errMsg);
-    return false;
-  }
-}
+import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { mutate } from "swr";
 
 export default function Sidebar() {
-  const { user, setUser } = useUserModel();
+  const { user } = getCurrentUser();
+
   const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
@@ -41,23 +21,8 @@ export default function Sidebar() {
       icon: BsBellFill,
       alert: user?.hasNotifications,
     },
-    { label: "Profile", href: `/users/${user?._id}`, icon: FaUser },
+    { label: "Profile", href: user ? `/users/${user?._id}` : "", icon: FaUser },
   ];
-
-  useEffect(function () {
-    async function checkCurrentUser() {
-      if (await authenticateCurrentUser()) {
-        const data = localStorage.getItem("user")
-          ? JSON.parse(localStorage.getItem("user")!)
-          : null;
-        setUser(data);
-      } else {
-        localStorage.removeItem("user");
-        setUser(null);
-      }
-    }
-    checkCurrentUser();
-  }, []);
 
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
@@ -70,17 +35,15 @@ export default function Sidebar() {
               href={item.href}
               label={item.label}
               icon={item.icon}
-              alert={item?.alert}
+              alert={item.alert}
             />
           ))}
           {user && (
             <SidebarItem
               onClick={() => {
-                setUser(null);
-                localStorage.removeItem("user");
                 router.push("/api/logout");
               }}
-              // href={"/api/logout"}
+              href={"/api/logout"}
               icon={BiLogOut}
               label="Logout"
             />

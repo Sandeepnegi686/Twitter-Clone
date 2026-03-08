@@ -9,7 +9,7 @@ import API_BASE_URL from "@/app/_lib/api";
 // import { useAppContext } from "@/app/_context/appContext";
 // import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
-import useUserModel from "@/app/_hooks/useUser";
+// import useUserModel from "@/app/_hooks/useUser";
 // import useUserModel from "@/app/_hooks/useUser";
 
 export default function RegisterModel() {
@@ -21,7 +21,7 @@ export default function RegisterModel() {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
 
-  const { setUser } = useUserModel();
+  // const { setUser } = useUserModel();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -54,8 +54,8 @@ export default function RegisterModel() {
         } else {
           // setUser(data.user);
           toast.success(data.message);
-          setUser(data.user!);
-          // mutate("/api/getCurrentUser");
+          // setUser(data.user!);
+          mutate("/api/getCurrentUser");
           localStorage.setItem("user", JSON.stringify(data.user));
           registerModel.onClose();
         }

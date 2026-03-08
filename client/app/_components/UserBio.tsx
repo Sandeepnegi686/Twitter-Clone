@@ -1,14 +1,16 @@
 "use client";
 import { useCallback, useMemo } from "react";
-import useUserModel from "../_hooks/useUser";
+// import useUserModel from "../_hooks/useUser";
 import { UserType } from "../types/UserType";
 import { format } from "date-fns";
 import Button from "./Button";
 import { BiCalendar } from "react-icons/bi";
 import useEditModel from "../_hooks/useEditModel";
 import useLoginModel from "../_hooks/useLoginModel";
-import API_BASE_URL, { api } from "../_lib/api";
+import API_BASE_URL from "../_lib/api";
 import toast from "react-hot-toast";
+import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { mutate } from "swr";
 import { sendNotification } from "../_lib/sendNotification";
 
 interface UserBioProps {
@@ -16,18 +18,13 @@ interface UserBioProps {
   fetchedUser: UserType | null;
   followersCount: number;
 }
-type FollowUnfollowResponse = {
-  success: boolean;
-  message: string;
-  user: UserType;
-};
 
 export default function UserBio({
   userId,
   fetchedUser,
   followersCount,
 }: UserBioProps) {
-  const { user, setUser } = useUserModel();
+  const { user } = getCurrentUser();
   const { onOpen } = useEditModel();
   const loginModel = useLoginModel();
 
@@ -44,7 +41,9 @@ export default function UserBio({
   const isFollowing = useMemo(
     function () {
       if (user) {
-        const isFollowing = user.followingIds?.some((id) => id === userId);
+        const isFollowing = user.followingIds?.some(
+          (id: string) => id === userId,
+        );
         return isFollowing;
       }
     },
@@ -71,8 +70,7 @@ export default function UserBio({
         return;
       }
       toast.success("Unfollowed");
-      setUser(data.user!);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      mutate("/api/getCurrentUser");
     } else {
       const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
         body: JSON.stringify({ userId }),
@@ -88,9 +86,8 @@ export default function UserBio({
         return;
       }
       toast.success("Followed");
-      setUser(data.user);
-      localStorage.setItem("user", JSON.stringify(data.user));
       await sendNotification(`${user.name} followed you`, userId);
+      mutate("/api/getCurrentUser");
     }
   }, [user, isFollowing, userId, loginModel]);
 

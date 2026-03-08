@@ -2,15 +2,18 @@
 import { useCallback, useState } from "react";
 import useLoginModel from "../_hooks/useLoginModel";
 import useRegisterModel from "../_hooks/useRegisterModel";
-import useUserModel from "../_hooks/useUser";
+// import useUserModel from "../_hooks/useUser";
 import toast from "react-hot-toast";
 import { api } from "../_lib/api";
 import { PostType } from "../types/PostType";
 import Button from "./Button";
 import Avatar from "./Avatar";
 import { CommentType } from "../types/CommentType";
+import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { mutate } from "swr";
 import { sendNotification } from "../_lib/sendNotification";
 import { UserType } from "../types/UserType";
+// import { getCurrentUser } from "../_hooks/getCurrentUser";
 
 interface PostCreateResponse {
   success: boolean;
@@ -30,9 +33,11 @@ interface FormProps {
 }
 
 export default function Form({ placeholder, isComment, post }: FormProps) {
+  // const { currentUser } = getCurrentUser();
+  // console.log(currentUser);
   const registerModal = useRegisterModel();
   const loginModel = useLoginModel();
-  const { user } = useUserModel();
+  const { user } = getCurrentUser();
   const [body, setBody] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -42,17 +47,18 @@ export default function Form({ placeholder, isComment, post }: FormProps) {
       if (isComment) {
         const { data } = await api.post<CommentResponseType>(
           "/api/v1/comment/create",
-          { body, postId: post?._id },
+          { body, postId: post!._id },
         );
         if (data.success) {
-          toast.success("Comment created");
+          toast.success("Comment Created");
           await sendNotification(
-            `${user!.name} liked your tweet`,
+            `${user.name} liked your tweet`,
             (post?.userId as UserType)._id,
           );
         } else {
           toast.error(data.message);
         }
+        mutate(`/api/getCommentsByPostId/${post!._id}`);
       } else {
         const { data } = await api.post<PostCreateResponse>(
           "/api/v1/post/create",
@@ -60,6 +66,7 @@ export default function Form({ placeholder, isComment, post }: FormProps) {
         );
         if (data.success) {
           toast.success("Post created");
+          mutate("/api/getPosts");
         } else {
           toast.error(data.message);
         }

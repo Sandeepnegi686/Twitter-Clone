@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { fetcher } from "../_lib/fetcher";
 
-export function getCurrentUser() {
+export function getComments(postId: string) {
   const { data, error, isLoading, mutate } = useSWR(
-    "/api/getCurrentUser",
+    `/api/getCommentsByPostId/${postId}`,
     fetcher,
     {
       revalidateIfStale: false,
@@ -13,7 +13,7 @@ export function getCurrentUser() {
   );
 
   return {
-    user: data || null,
+    comments: data || [],
     isLoading,
     error,
     mutate,

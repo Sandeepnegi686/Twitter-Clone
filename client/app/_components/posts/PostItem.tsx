@@ -1,6 +1,6 @@
 "use client";
 import useLoginModel from "@/app/_hooks/useLoginModel";
-import useUserModel from "@/app/_hooks/useUser";
+// import useUserModel from "@/app/_hooks/useUser";
 import { PostType } from "@/app/types/PostType";
 import { formatDistanceToNowStrict } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -9,6 +9,8 @@ import Avatar from "../Avatar";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
 import API_BASE_URL from "@/app/_lib/api";
 import toast from "react-hot-toast";
+import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
+import { mutate } from "swr";
 import { sendNotification } from "@/app/_lib/sendNotification";
 
 interface PostItemProps {
@@ -19,7 +21,7 @@ interface PostItemProps {
 export default function PostItem({ post }: PostItemProps) {
   const router = useRouter();
   const loginModel = useLoginModel();
-  const { user } = useUserModel();
+  const { user } = getCurrentUser();
 
   const goToUser = useCallback(
     (event: any) => {
@@ -54,8 +56,8 @@ export default function PostItem({ post }: PostItemProps) {
           toast.error(data.error);
           return;
         }
-        toast.success("unLiked");
-        post.likedId = post.likedId?.filter((ids) => ids !== user._id);
+        mutate("/api/getPosts");
+        mutate(`/api/getPost/${post._id}`);
       } else {
         const res = await fetch(`${API_BASE_URL}/api/v1/post/like-post`, {
           method: "PUT",
@@ -70,15 +72,15 @@ export default function PostItem({ post }: PostItemProps) {
           toast.error(data.error);
           return;
         }
-        toast.success("Liked");
-        post.likedId = post.likedId?.filter((ids) => ids !== user._id);
         await sendNotification(
           `${user.name} liked your tweet`,
           post.userId._id,
         );
+        mutate("/api/getPosts");
+        mutate(`/api/getPost/${post._id}`);
       }
     },
-    [loginModel.isOpen, post._id, user?._id, post.likedId],
+    [loginModel.isOpen, post._id, user, post.likedId?.length],
   );
 
   const createdAt = useMemo(
@@ -90,13 +92,14 @@ export default function PostItem({ post }: PostItemProps) {
     },
     [post?.createdAt],
   );
+
   const hasLiked = useMemo(
     function () {
       if (!user) return false;
       if (post.likedId?.includes(user?._id)) return true;
       return false;
     },
-    [user?._id, post.likedId?.length, loginModel.isOpen, onLike],
+    [user, post.likedId?.length, loginModel.isOpen, onLike],
   );
 
   return (

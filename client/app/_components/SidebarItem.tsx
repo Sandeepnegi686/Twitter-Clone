@@ -4,8 +4,9 @@ import { useCallback } from "react";
 import { IconType } from "react-icons";
 import { BsDot } from "react-icons/bs";
 
-import useUserModel from "../_hooks/useUser";
+// import useUserModel from "../_hooks/useUser";
 import useLoginModel from "../_hooks/useLoginModel";
+import { getCurrentUser } from "../_hooks/getCurrentUser";
 
 interface SidebarItemProps {
   label: string;
@@ -23,7 +24,8 @@ export default function SidebarItem({
   alert,
 }: SidebarItemProps) {
   const router = useRouter();
-  const { user } = useUserModel();
+  // const { user } = useUserModel();
+  const { user } = getCurrentUser();
   const { isOpen, onOpen } = useLoginModel();
 
   const handleClick = useCallback(() => {

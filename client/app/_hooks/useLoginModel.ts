@@ -1,5 +1,4 @@
 import { create } from "zustand";
-// import useUserModel from "./useUser";
 
 interface LoginModelStore {
   isOpen: boolean;

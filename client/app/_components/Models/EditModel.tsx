@@ -10,10 +10,11 @@ import toast from "react-hot-toast";
 // import { useAppContext } from "@/app/_context/appContext";
 // import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
-import useUserModel from "@/app/_hooks/useUser";
+// import useUserModel from "@/app/_hooks/useUser";
 import { UserType } from "@/app/types/UserType";
 import useEditModel from "@/app/_hooks/useEditModel";
 import ImageUpload from "../ImageUpload";
+import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 
 interface EditUserResponse {
   success: boolean;
@@ -22,7 +23,7 @@ interface EditUserResponse {
 }
 
 export default function EditModel() {
-  const { user, setUser } = useUserModel();
+  const { user } = getCurrentUser();
   const { onClose, isOpen } = useEditModel();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -62,7 +63,8 @@ export default function EditModel() {
         },
       );
       const data = await response.data;
-      setUser(data.user);
+      // setUser(data.user);
+      mutate("/api/getCurrentUser");
       localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("User updated successfully");
       onClose();
@@ -74,7 +76,7 @@ export default function EditModel() {
     } finally {
       setIsLoading(false);
     }
-  }, [name, bio, profileImageFile, coverImageFile, onClose, setUser]);
+  }, [name, bio, profileImageFile, coverImageFile, onClose]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">

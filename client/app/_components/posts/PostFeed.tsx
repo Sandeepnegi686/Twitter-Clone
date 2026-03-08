@@ -1,24 +1,18 @@
-import { api } from "@/app/_lib/api";
+"use client";
 import { PostType } from "@/app/types/PostType";
 import PostItem from "./PostItem";
+import { getAllPosts } from "@/app/_hooks/getPosts";
 
 interface PostFeedProps {
   userId?: string;
 }
-interface GET_POST_API_RESPONSE {
-  success: boolean;
-  posts: PostType[];
-}
 
-export default async function PostFeed({ userId }: PostFeedProps) {
-  const { data } = await api.get<GET_POST_API_RESPONSE>(
-    userId ? `/api/v1/post/getPosts/${userId}` : "/api/v1/post/getPosts/",
-  );
-  const posts = data.posts;
+export default function PostFeed({ userId }: PostFeedProps) {
+  const { posts } = getAllPosts(userId);
   return (
     <>
-      {posts.map((post) => (
-        <PostItem key={post._id} post={post} userId={userId} />
+      {posts.map((post: PostType) => (
+        <PostItem key={post._id} post={post} />
       ))}
     </>
   );

@@ -7,7 +7,7 @@ import useRegisterModel from "@/app/_hooks/useRegisterModel";
 import API_BASE_URL, { api } from "@/app/_lib/api";
 import toast from "react-hot-toast";
 import { mutate } from "swr";
-import useUserModel from "@/app/_hooks/useUser";
+// import useUserModel from "@/app/_hooks/useUser";
 import { UserType } from "@/app/types/UserType";
 
 interface LoginApiResponse {
@@ -19,7 +19,7 @@ interface LoginApiResponse {
 export default function LoginModel() {
   const regiterModel = useRegisterModel();
   const loginModel = useLoginModel();
-  const { setUser } = useUserModel();
+  // const { setUser } = useUserModel();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -52,13 +52,14 @@ export default function LoginModel() {
         if (!data.success!) {
           toast.error(data.message!);
         } else {
-          // setUser(data.user);
           toast.success(data.message!);
-          // await mutate("/api/getCurrentUser");
-          setUser(data.user!);
-          // console.log(currentUser);
+          mutate("/api/getCurrentUser");
           loginModel.onClose();
-          localStorage.setItem("user", JSON.stringify(data.user));
+          // setUser(data.user);
+          // await mutate("/api/getCurrentUser");
+          // setUser(data.user!);
+          // console.log(currentUser);
+          // localStorage.setItem("user", JSON.stringify(data.user));
         }
       } catch (error) {
         console.log(error);
