@@ -14,7 +14,7 @@ import authenticateUser from "./middleware/authMiddleware";
 
 const app: Express = express();
 const DB = process.env.DB_URL || "";
-const PORT = process.env.PORT || 0;
+const PORT = process.env.PORT || 80;
 const CLIENT_URL = process.env.CLIENT_URL || "";
 
 declare global {
