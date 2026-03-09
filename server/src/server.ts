@@ -12,6 +12,7 @@ import notificationRouter from "./Routes/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
 import connectDB from "./lib/connectDB";
+import helmet from "helmet";
 
 const app: Express = express();
 const DB_URL = process.env.DB_URL || "";
@@ -39,6 +40,7 @@ app.use(function (req, res, next) {
 app.use(express.json());
 app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(cookieParser());
+app.use(helmet());
 
 app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 

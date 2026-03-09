@@ -55,6 +55,8 @@ async function signUp(
     res.cookie("access-token", token, {
       maxAge: 1000 * 60 * 60 * 24,
       httpOnly: true,
+      secure: true,
+      sameSite: "none",
     });
 
     return res.status(201).json({
@@ -114,7 +116,8 @@ async function loginUser(
   res.cookie("access-token", token, {
     maxAge: 1000 * 60 * 60 * 24,
     httpOnly: true,
-    // sameSite: "lax",
+    secure: true,
+    sameSite: "none",
   });
   return res.status(200).json({
     success: true,
