@@ -11,7 +11,7 @@ import commentRouter from "./Routes/comment";
 import notificationRouter from "./Routes/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
-import connectDB from "./lib/connectDB";
+import dbConnect from "./lib/connectDB";
 
 const app: Express = express();
 const DB_URL = process.env.DB_URL || "";
@@ -53,7 +53,7 @@ app.use(errorHandler);
 
 async function start() {
   try {
-    await connectDB(DB_URL).then(() => console.log("DB connected."));
+    await dbConnect(DB_URL).then(() => console.log("DB connected."));
     app.listen(PORT, function () {
       console.log(`server running at ${PORT}...`);
     });
