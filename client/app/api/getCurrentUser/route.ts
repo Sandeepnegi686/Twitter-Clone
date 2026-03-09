@@ -5,6 +5,7 @@ export async function GET() {
   const cookieStore = cookies();
   const cookie = (await cookieStore).get("access-token");
   const response = await fetch(`${API_BASE_URL}/api/v1/auth/me`, {
+    credentials: "include",
     headers: {
       Cookie: `access-token=${cookie?.value}`,
     },
