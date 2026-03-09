@@ -11,7 +11,7 @@ import commentRouter from "./Routes/comment";
 import notificationRouter from "./Routes/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
-import { connectDB } from "./lib/connectDB";
+import connectDB from "./lib/connectDB";
 
 const app: Express = express();
 const DB_URL = process.env.DB_URL || "";
