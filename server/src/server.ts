@@ -11,9 +11,10 @@ import commentRouter from "./Routes/comment";
 import notificationRouter from "./Routes/notification";
 import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
+import connectDB from "./lib/connectDB";
 
 const app: Express = express();
-const DB = process.env.DB_URL || "";
+const DB_URL = process.env.DB_URL || "";
 const PORT = process.env.PORT || 80;
 const CLIENT_URL = process.env.CLIENT_URL || "";
 
@@ -50,12 +51,16 @@ app.use("/api/v1/notification/", authenticateUser, notificationRouter);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
-  console.log("Server started at port :", PORT);
-  connect(DB)
-    .then(() => console.log("Database Connected."))
-    .catch((e) => {
-      console.log(e);
-      process.exit(1);
+async function start() {
+  try {
+    await connectDB(DB_URL).then(() => console.log("DB connected."));
+    app.listen(PORT, function () {
+      console.log(`server running at ${PORT}...`);
     });
-});
+  } catch (error) {
+    console.log(error);
+    process.exit(1);
+  }
+}
+
+start();
