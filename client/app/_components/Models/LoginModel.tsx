@@ -47,6 +47,9 @@ export default function LoginModel() {
             email,
             password,
           },
+          {
+            withCredentials: true,
+          },
         );
         const { data } = res;
         if (!data.success!) {
