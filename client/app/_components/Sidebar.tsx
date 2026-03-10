@@ -5,14 +5,11 @@ import SidebarLogo from "./SidebarLogo";
 import SidebarItem from "./SidebarItem";
 import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
-import { useRouter } from "next/navigation";
 import { getCurrentUser } from "../_hooks/getCurrentUser";
-import { mutate } from "swr";
 
 export default function Sidebar() {
   const { user } = getCurrentUser();
 
-  const router = useRouter();
   const items = [
     { label: "Home", href: "/", icon: BsHouseFill },
     {
@@ -41,8 +38,7 @@ export default function Sidebar() {
           {user && (
             <SidebarItem
               onClick={() => {
-                router.push("/api/logout");
-                window.location.reload();
+                window.location.href = "/api/logout";
               }}
               href={"/api/logout"}
               icon={BiLogOut}
