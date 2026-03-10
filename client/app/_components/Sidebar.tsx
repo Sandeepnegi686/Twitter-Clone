@@ -42,6 +42,7 @@ export default function Sidebar() {
             <SidebarItem
               onClick={() => {
                 router.push("/api/logout");
+                window.location.reload();
               }}
               href={"/api/logout"}
               icon={BiLogOut}

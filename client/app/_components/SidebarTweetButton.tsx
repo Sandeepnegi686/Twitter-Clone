@@ -3,16 +3,18 @@ import { useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { FaFeather } from "react-icons/fa";
 import useLoginModel from "../_hooks/useLoginModel";
+import { getCurrentUser } from "../_hooks/getCurrentUser";
 
 export default function SidebarTweetButton() {
   const router = useRouter();
   const loginModel = useLoginModel();
+  const { user } = getCurrentUser();
 
   const onClick = useCallback(
     function () {
-      loginModel.onOpen();
+      if (!user) loginModel.onOpen();
     },
-    [loginModel],
+    [loginModel, user],
   );
 
   return (

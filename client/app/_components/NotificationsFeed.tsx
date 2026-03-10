@@ -4,6 +4,7 @@ import { BsTwitter } from "react-icons/bs";
 import { NotificationsType } from "../types/NotificationsType";
 import { useEffect } from "react";
 import API_BASE_URL from "../_lib/api";
+import { mutate } from "swr";
 
 interface NotifcationsFeed {
   notifications: NotificationsType[];
@@ -12,6 +13,7 @@ interface NotifcationsFeed {
 export default function NotificationsFeed({ notifications }: NotifcationsFeed) {
   useEffect(() => {
     clearNotification();
+    mutate("/api/getCurrentUser");
   }, []);
 
   if (notifications.length == 0) {

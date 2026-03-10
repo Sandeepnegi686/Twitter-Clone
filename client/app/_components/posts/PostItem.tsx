@@ -3,7 +3,7 @@ import useLoginModel from "@/app/_hooks/useLoginModel";
 // import useUserModel from "@/app/_hooks/useUser";
 import { PostType } from "@/app/types/PostType";
 import { formatDistanceToNowStrict } from "date-fns";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import Avatar from "../Avatar";
 import { AiFillHeart, AiOutlineHeart, AiOutlineMessage } from "react-icons/ai";
@@ -22,6 +22,7 @@ export default function PostItem({ post }: PostItemProps) {
   const router = useRouter();
   const loginModel = useLoginModel();
   const { user } = getCurrentUser();
+  const pathname = usePathname();
 
   const goToUser = useCallback(
     (event: any) => {
@@ -56,8 +57,13 @@ export default function PostItem({ post }: PostItemProps) {
           toast.error(data.error);
           return;
         }
-        mutate("/api/getPosts");
-        mutate(`/api/getPost/${post._id}`);
+        const mutateUrl = pathname.includes("posts")
+          ? `/api/getPost/${post._id}`
+          : pathname.includes("users")
+            ? `/api/getPosts/${post.userId._id}`
+            : "/api/getPosts";
+        mutate(mutateUrl);
+        // mutate(`/api/getPost/${post._id}`);
       } else {
         const res = await fetch(`${API_BASE_URL}/api/v1/post/like-post`, {
           method: "PUT",
@@ -76,11 +82,17 @@ export default function PostItem({ post }: PostItemProps) {
           `${user.name} liked your tweet`,
           post.userId._id,
         );
-        mutate("/api/getPosts");
-        mutate(`/api/getPost/${post._id}`);
+        const mutateUrl = pathname.includes("posts")
+          ? `/api/getPost/${post._id}`
+          : pathname.includes("users")
+            ? `/api/getPosts/${post.userId._id}`
+            : "/api/getPosts";
+        mutate(mutateUrl);
+        // mutate("/api/getPosts");
+        // mutate(`/api/getPost/${post._id}`);
       }
     },
-    [loginModel.isOpen, post._id, user, post.likedId?.length],
+    [loginModel.isOpen, post._id, user, pathname, post.likedId?.length],
   );
 
   const createdAt = useMemo(

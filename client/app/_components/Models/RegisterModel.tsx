@@ -42,13 +42,17 @@ export default function RegisterModel() {
           toast.error("Feilds are empty");
           return;
         }
-        const res = await fetch(`${API_BASE_URL}/api/v1/auth/signup`, {
+        const res = await fetch("/api/signup", {
           body: JSON.stringify({ name, username, email, password }),
-          credentials: "include",
           method: "POST",
           headers: { "Content-Type": "application/json" },
         });
         const data = await res.json();
+        // const res = await fetch("/api/login", {
+        //   method: "POST",
+        //   body: JSON.stringify({ email, password }),
+        // });
+        // const data: LoginApiResponse = await res.json();
         if (!data.success) {
           toast.error(data.message);
         } else {
