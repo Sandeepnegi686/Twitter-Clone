@@ -88,6 +88,7 @@ export default function PostItem({ post }: PostItemProps) {
             ? `/api/getPosts/${post.userId._id}`
             : "/api/getPosts";
         mutate(mutateUrl);
+        toast.success("Liked");
         // mutate("/api/getPosts");
         // mutate(`/api/getPost/${post._id}`);
       }
