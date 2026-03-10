@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import CommentModel from "../Model/CommentModel";
 import { Types } from "mongoose";
+import PostModel from "../Model/PostModel";
 
 async function createComment(
   req: Request<{}, {}, { body: string; postId: string }>,
@@ -15,6 +16,9 @@ async function createComment(
   }
   const userId = req.user?._id;
   const comment = await CommentModel.create({ body, userId, postId });
+  await PostModel.findByIdAndUpdate(postId, {
+    $push: { comments: comment._id },
+  });
   return res
     .status(201)
     .json({ success: true, message: "Comment is created", comment });

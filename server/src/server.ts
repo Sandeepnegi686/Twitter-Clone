@@ -13,6 +13,8 @@ import { errorHandler } from "./middleware/errorHandler";
 import authenticateUser from "./middleware/authMiddleware";
 import connectDB from "./lib/connectDB";
 import helmet from "helmet";
+import PostModel from "./Model/PostModel";
+import CommentModel from "./Model/CommentModel";
 
 const app: Express = express();
 const DB_URL = process.env.DB_URL || "";
