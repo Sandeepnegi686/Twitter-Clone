@@ -25,8 +25,9 @@ export default function Sidebar() {
   ];
 
   const logout = async () => {
-    await api.get(`${API_BASE_URL}/api/v1/auth/logout`, {
-      withCredentials: true,
+    await fetch("/api/logout", {
+      method: "GET",
+      credentials: "include",
     });
 
     window.location.href = "/";
