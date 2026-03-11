@@ -33,7 +33,7 @@ declare global {
 
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://twitter-clone-zeta-smoky.vercel.app/",
+  "https://twitter-clone-zeta-smoky.vercel.app",
 ];
 
 //request logger
