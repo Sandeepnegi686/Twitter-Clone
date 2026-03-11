@@ -34,6 +34,7 @@ async function clearNotification(req: Request, res: Response) {
   const userId = req.user?._id;
   await NotificationsModel.deleteMany({ userId });
   await UserModel.findByIdAndUpdate(userId, { hasNotifications: false });
+  res.setHeader("Cache-Control", "no-store");
   return res
     .status(200)
     .json({ success: true, message: "Notification deleted" });

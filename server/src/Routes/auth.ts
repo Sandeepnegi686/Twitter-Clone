@@ -10,7 +10,20 @@ router.post("/login", loginUser);
 
 router.get("/me", authenticateUser, async (req: Request, res: Response) => {
   const user = await UserModel.findById(req.user?._id);
+  res.setHeader("Cache-Control", "no-store");
   return res.status(200).json({ success: true, user });
+});
+
+router.get("/logout", async (req: Request, res: Response) => {
+  res.cookie("access-token", "", {
+    expires: new Date(0),
+    maxAge: 1000 * 60 * 60 * 24,
+    httpOnly: true,
+    secure: true,
+    sameSite: "none" as const,
+    path: "/",
+  });
+  return res.status(200).json({ success: true });
 });
 
 export default router;

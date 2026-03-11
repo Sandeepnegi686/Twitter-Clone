@@ -6,8 +6,11 @@ import SidebarItem from "./SidebarItem";
 import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
 import { getCurrentUser } from "../_hooks/getCurrentUser";
+import { useRouter } from "next/navigation";
+import API_BASE_URL from "../_lib/api";
 
 export default function Sidebar() {
+  const router = useRouter();
   const { user } = getCurrentUser();
 
   const items = [
@@ -20,6 +23,13 @@ export default function Sidebar() {
     },
     { label: "Profile", href: user ? `/users/${user?._id}` : "", icon: FaUser },
   ];
+  const logout = async () => {
+    await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
+      method: "GET",
+      credentials: "include",
+    });
+    window.location.href = "/";
+  };
 
   return (
     <div className="col-span-1 h-full pr-4 md:pr-6">
@@ -36,14 +46,7 @@ export default function Sidebar() {
             />
           ))}
           {user && (
-            <SidebarItem
-              onClick={() => {
-                window.location.href = "/api/logout";
-              }}
-              href={"/api/logout"}
-              icon={BiLogOut}
-              label="Logout"
-            />
+            <SidebarItem onClick={logout} icon={BiLogOut} label="Logout" />
           )}
           <SidebarTweetButton />
         </div>

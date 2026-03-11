@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { CookieOptions, NextFunction, Request, Response } from "express";
 // import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import argon2 from "argon2";
@@ -14,6 +14,14 @@ interface LoginRequestBodyType {
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "";
+
+const cookieOptions: CookieOptions = {
+  maxAge: 1000 * 60 * 60 * 24,
+  httpOnly: true,
+  secure: true,
+  sameSite: "none" as const,
+  path: "/",
+};
 
 async function signUp(
   req: Request<{}, {}, SignUpType, {}>,
@@ -52,12 +60,7 @@ async function signUp(
       expiresIn: 60 * 60 * 24,
     });
 
-    res.cookie("access-token", token, {
-      maxAge: 1000 * 60 * 60 * 24,
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
+    res.cookie("access-token", token, cookieOptions);
 
     return res.status(201).json({
       success: true,
@@ -67,9 +70,6 @@ async function signUp(
   } catch (error) {
     console.log(error);
     next(error);
-    // return res
-    //   .status(500)
-    //   .json({ s: false, m: "something went wrong on the server" });
   }
 }
 
@@ -113,12 +113,7 @@ async function loginUser(
     expiresIn: 60 * 60 * 24,
   });
 
-  res.cookie("access-token", token, {
-    maxAge: 1000 * 60 * 60 * 24,
-    httpOnly: true,
-    secure: true,
-    sameSite: "none",
-  });
+  res.cookie("access-token", token, cookieOptions);
   return res.status(200).json({
     success: true,
     message: "logged in",
