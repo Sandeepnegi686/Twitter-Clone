@@ -7,7 +7,7 @@ import { BiLogOut } from "react-icons/bi";
 import SidebarTweetButton from "./SidebarTweetButton";
 import { getCurrentUser } from "../_hooks/getCurrentUser";
 import { useRouter } from "next/navigation";
-import API_BASE_URL from "../_lib/api";
+import API_BASE_URL, { api } from "../_lib/api";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -25,8 +25,8 @@ export default function Sidebar() {
   ];
 
   const logout = async () => {
-    await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
-      credentials: "include",
+    await api.get(`${API_BASE_URL}/api/v1/auth/logout`, {
+      withCredentials: true,
     });
 
     window.location.href = "/";

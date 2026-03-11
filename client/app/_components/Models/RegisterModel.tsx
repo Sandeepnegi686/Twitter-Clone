@@ -5,12 +5,19 @@ import Input from "../Input";
 import Model from "../Model";
 import useLoginModel from "@/app/_hooks/useLoginModel";
 import toast from "react-hot-toast";
-import API_BASE_URL from "@/app/_lib/api";
+import API_BASE_URL, { api } from "@/app/_lib/api";
 // import { useAppContext } from "@/app/_context/appContext";
 // import { getCurrentUser } from "@/app/_hooks/getCurrentUser";
 import { mutate } from "swr";
+import { UserType } from "@/app/types/UserType";
 // import useUserModel from "@/app/_hooks/useUser";
 // import useUserModel from "@/app/_hooks/useUser";
+
+interface SignUpApiResponse {
+  success: boolean;
+  message: string;
+  user?: UserType;
+}
 
 export default function RegisterModel() {
   const loginModel = useLoginModel();
@@ -42,12 +49,19 @@ export default function RegisterModel() {
           toast.error("Feilds are empty");
           return;
         }
-        const res = await fetch("/api/signup", {
-          body: JSON.stringify({ name, username, email, password }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-        const data = await res.json();
+        const res = await api.post<SignUpApiResponse>(
+          `${API_BASE_URL}/api/v1/auth/signup`,
+          { name, username, email, password },
+          {
+            withCredentials: true,
+          },
+        );
+        // const res = await fetch("/api/signup", {
+        //   body: JSON.stringify({ name, username, email, password }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
+        const data = await res.data;
         // const res = await fetch("/api/login", {
         //   method: "POST",
         //   body: JSON.stringify({ email, password }),
@@ -60,7 +74,7 @@ export default function RegisterModel() {
           toast.success(data.message);
           // setUser(data.user!);
           mutate("/api/getCurrentUser");
-          localStorage.setItem("user", JSON.stringify(data.user));
+          // localStorage.setItem("user", JSON.stringify(data.user));
           registerModel.onClose();
         }
       } catch (error) {
