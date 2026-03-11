@@ -12,7 +12,5 @@ export async function POST(req: Request) {
 
   const data = await res.json();
 
-  return Response.json(data, {
-    headers: res.headers,
-  });
+  return Response.json(data);
 }

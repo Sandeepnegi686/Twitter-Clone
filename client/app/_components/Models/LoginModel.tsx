@@ -54,6 +54,7 @@ export default function LoginModel() {
         const res = await fetch("/api/login", {
           method: "POST",
           body: JSON.stringify({ email, password }),
+          credentials: "include",
         });
         const data: LoginApiResponse = await res.json();
         if (!data.success!) {
