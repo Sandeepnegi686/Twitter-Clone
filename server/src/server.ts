@@ -31,6 +31,11 @@ declare global {
   }
 }
 
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://twitter-clone-zeta-smoky.vercel.app/",
+];
+
 //request logger
 app.use(function (req, res, next) {
   console.log(`${req.method} request on ${req.url}`);
@@ -38,9 +43,20 @@ app.use(function (req, res, next) {
 });
 
 app.use(express.json());
-app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(cookieParser());
 app.use(helmet());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  }),
+);
 
 app.get("/", (_: Request, res: Response) => res.send("hello from Ts - node"));
 
