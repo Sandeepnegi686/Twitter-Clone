@@ -23,11 +23,12 @@ export default function Sidebar() {
     },
     { label: "Profile", href: user ? `/users/${user?._id}` : "", icon: FaUser },
   ];
+
   const logout = async () => {
     await fetch(`${API_BASE_URL}/api/v1/auth/logout`, {
-      method: "GET",
       credentials: "include",
     });
+
     window.location.href = "/";
   };
 
