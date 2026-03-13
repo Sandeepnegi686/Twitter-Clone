@@ -41,10 +41,10 @@ export default function NotificationsFeed({ notifications }: NotifcationsFeed) {
 }
 
 async function clearNotification() {
-  const res = await fetch(
-    `${API_BASE_URL}/api/v1/notification/clearNotification`,
-    { credentials: "include" },
-  );
+  const res = await fetch(`/api/notification`, {
+    credentials: "include",
+    method: "DELETE",
+  });
   const data = await res.json();
   if (!data.success) {
     console.log("something went wrong!");
