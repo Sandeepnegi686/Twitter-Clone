@@ -56,13 +56,10 @@ export default function UserBio({
       return;
     }
     if (isFollowing) {
-      const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
+      const res = await fetch(`/api/userFollow`, {
         body: JSON.stringify({ userId }),
         method: "DELETE",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
       const data = await res.json();
       if (!data.success) {
@@ -72,13 +69,10 @@ export default function UserBio({
       toast.success("Unfollowed");
       mutate("/api/getCurrentUser");
     } else {
-      const res = await fetch(`${API_BASE_URL}/api/v1/user/follow-user`, {
+      const res = await fetch(`/api/userFollow`, {
         body: JSON.stringify({ userId }),
         method: "PUT",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
       const data = await res.json();
       if (!data.success) {
