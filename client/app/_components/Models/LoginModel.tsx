@@ -41,22 +41,22 @@ export default function LoginModel() {
           toast.error("Feilds are empty");
           return;
         }
-        // const res = await api.post<LoginApiResponse>(
-        //   `${API_BASE_URL}/api/v1/auth/login`,
-        //   {
-        //     email,
-        //     password,
-        //   },
-        //   {
-        //     withCredentials: true,
-        //   },
-        // );
-        const res = await fetch("/api/login", {
-          method: "POST",
-          body: JSON.stringify({ email, password }),
-          credentials: "include",
-        });
-        const data: LoginApiResponse = await res.json();
+        const { data } = await api.post<LoginApiResponse>(
+          `${API_BASE_URL}/api/v1/auth/login`,
+          {
+            email,
+            password,
+          },
+          {
+            withCredentials: true,
+          },
+        );
+        // const res = await fetch("/api/login", {
+        //   method: "POST",
+        //   body: JSON.stringify({ email, password }),
+        //   credentials: "include",
+        // });
+        // const data: LoginApiResponse = await res;
         if (!data.success!) {
           toast.error(data.message!);
         } else {

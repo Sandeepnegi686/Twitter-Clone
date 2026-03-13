@@ -12,5 +12,12 @@ export async function POST(req: Request) {
 
   const data = await res.json();
 
-  return Response.json(data);
+  const cookie = res.headers.get("set-cookie");
+
+  return new Response(JSON.stringify(data), {
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": cookie || "",
+    },
+  });
 }
