@@ -2,7 +2,6 @@ import API_BASE_URL from "@/app/_lib/api";
 
 export async function POST(req: Request) {
   const body = await req.json();
-
   const res = await fetch(`${API_BASE_URL}/api/v1/auth/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -12,7 +11,13 @@ export async function POST(req: Request) {
 
   const data = await res.json();
 
-  return Response.json(data, {
-    headers: res.headers,
+  const cookie = res.headers.get("set-cookie");
+
+  return new Response(JSON.stringify(data), {
+    status: res.status,
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": cookie || "",
+    },
   });
 }

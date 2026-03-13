@@ -17,7 +17,6 @@ import helmet from "helmet";
 const app: Express = express();
 const DB_URL = process.env.DB_URL || "";
 const PORT = process.env.PORT || 80;
-const CLIENT_URL = process.env.CLIENT_URL || "";
 
 declare global {
   namespace Express {
@@ -30,11 +29,6 @@ declare global {
     }
   }
 }
-
-const allowedOrigins = [
-  "http://localhost:3000",
-  "https://twitter-clone-zeta-smoky.vercel.app",
-];
 
 //request logger
 app.use(function (req, res, next) {

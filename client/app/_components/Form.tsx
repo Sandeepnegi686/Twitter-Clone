@@ -45,10 +45,12 @@ export default function Form({ placeholder, isComment, post }: FormProps) {
     try {
       setIsLoading(true);
       if (isComment) {
-        const { data } = await api.post<CommentResponseType>(
-          "/api/v1/comment/create",
-          { body, postId: post!._id },
-        );
+        const res = await fetch("/api/comment", {
+          body: JSON.stringify({ body, postId: post!._id }),
+          method: "POST",
+          credentials: "include",
+        });
+        const data = await res.json();
         if (data.success) {
           toast.success("Comment Created");
           await sendNotification(

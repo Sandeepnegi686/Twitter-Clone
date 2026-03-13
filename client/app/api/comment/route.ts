@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 export async function POST(req: Request) {
   const cookieStore = await cookies();
   const cookie = (await cookieStore).get("access-token");
-  const body = req.json();
+  const body = await req.json();
   const response = await fetch(`${API_BASE_URL}/api/v1/comment/create`, {
     credentials: "include",
     method: "POST",

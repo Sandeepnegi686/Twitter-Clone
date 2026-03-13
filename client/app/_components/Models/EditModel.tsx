@@ -55,15 +55,12 @@ export default function EditModel() {
       formData.append("bio", bio!);
       if (profileImageFile) formData.append("profileImage", profileImageFile);
       if (coverImageFile) formData.append("coverImage", coverImageFile);
-      const response = await api.post<EditUserResponse>(
-        "/api/v1/user/update-bio",
-        formData,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        },
-      );
-      const data = await response.data;
-      // setUser(data.user);
+      const response = await fetch("/api/user/update-bio", {
+        body: formData,
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await response.json();
       mutate("/api/getCurrentUser");
       localStorage.setItem("user", JSON.stringify(data.user));
       toast.success("User updated successfully");
