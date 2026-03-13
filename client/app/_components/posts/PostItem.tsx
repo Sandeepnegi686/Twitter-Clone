@@ -44,13 +44,10 @@ export default function PostItem({ post }: PostItemProps) {
         return;
       }
       if (hasLiked) {
-        const res = await fetch(`${API_BASE_URL}/api/v1/post/un-like-post`, {
+        const res = await fetch(`/api/post-like`, {
           method: "DELETE",
           credentials: "include",
           body: JSON.stringify({ postId: post._id }),
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
         const data = await res.json();
         if (!data.success) {
@@ -65,13 +62,10 @@ export default function PostItem({ post }: PostItemProps) {
         mutate(mutateUrl);
         // mutate(`/api/getPost/${post._id}`);
       } else {
-        const res = await fetch(`${API_BASE_URL}/api/v1/post/like-post`, {
+        const res = await fetch(`/api/post-like`, {
           method: "PUT",
           credentials: "include",
           body: JSON.stringify({ postId: post._id }),
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
         const data = await res.json();
         if (!data.success) {
