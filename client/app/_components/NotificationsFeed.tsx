@@ -3,7 +3,6 @@
 import { BsTwitter } from "react-icons/bs";
 import { NotificationsType } from "../types/NotificationsType";
 import { useEffect } from "react";
-import API_BASE_URL from "../_lib/api";
 import { mutate } from "swr";
 
 interface NotifcationsFeed {

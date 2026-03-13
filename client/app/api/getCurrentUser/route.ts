@@ -13,7 +13,7 @@ export async function GET() {
   });
 
   if (!response.ok) {
-    return Response.json(null, { status: 401 });
+    return Response.json(null, { status: response.status });
   }
 
   const data = await response.json();
