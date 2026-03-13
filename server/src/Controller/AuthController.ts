@@ -1,12 +1,9 @@
 import { CookieOptions, NextFunction, Request, Response } from "express";
-// import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import argon2 from "argon2";
 
 import UserModel from "../Model/UserModel";
 import { SignUpType } from "../types/Registration";
 import { loginValidation, registerValidation } from "../lib/validate";
-import { APIError } from "../middleware/errorHandler";
 
 interface LoginRequestBodyType {
   email: string;
