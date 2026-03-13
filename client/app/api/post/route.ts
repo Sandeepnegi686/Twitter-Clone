@@ -1,0 +1,23 @@
+import API_BASE_URL from "@/app/_lib/api";
+import { cookies } from "next/headers";
+
+export async function POST(req: Request) {
+  const cookieStore = await cookies();
+  const cookie = (await cookieStore).get("access-token");
+  const body = req.json();
+  const response = await fetch(`${API_BASE_URL}/api/v1/post/create`, {
+    body: JSON.stringify(body),
+    method: "POST",
+    headers: {
+      Cookie: `access-token=${cookie?.value}`,
+      "Content-Type": "application/json",
+    },
+    cache: "no-store",
+  });
+  // console.log(response);
+  if (!response.ok) {
+    return Response.json(null, { status: response.status });
+  }
+  const data = await response.json();
+  return Response.json(data, { status: response.status });
+}

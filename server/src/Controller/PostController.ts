@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import PostModel from "../Model/PostModel";
-import UserModel from "../Model/UserModel";
 import { Types } from "mongoose";
 
 async function createPost(
@@ -8,6 +7,7 @@ async function createPost(
   res: Response,
 ) {
   const body = req.body.body;
+  console.log(req.body);
   if (!body) {
     return res
       .status(400)

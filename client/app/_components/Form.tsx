@@ -52,7 +52,7 @@ export default function Form({ placeholder, isComment, post }: FormProps) {
         if (data.success) {
           toast.success("Comment Created");
           await sendNotification(
-            `${user.name} liked your tweet`,
+            `${user.name} commented on your tweet`,
             (post?.userId as UserType)._id,
           );
         } else {
@@ -60,10 +60,12 @@ export default function Form({ placeholder, isComment, post }: FormProps) {
         }
         mutate(`/api/getCommentsByPostId/${post!._id}`);
       } else {
-        const { data } = await api.post<PostCreateResponse>(
-          "/api/v1/post/create",
-          { body },
-        );
+        const res = await fetch("/api/post", {
+          body: JSON.stringify({ body }),
+          method: "POST",
+          credentials: "include",
+        });
+        const data: PostCreateResponse = await res.json();
         if (data.success) {
           toast.success("Post created");
           mutate("/api/getPosts");
