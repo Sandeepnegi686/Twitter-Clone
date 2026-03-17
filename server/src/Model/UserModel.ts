@@ -41,7 +41,7 @@ const schema = new Schema<UserType, UserModelType, IUserMethods>(
       required: [true, "Please provide email"],
       unique: true,
     },
-    hashedPassword: { type: String, required: true, select: false },
+    hashedPassword: { type: String, select: false },
     emailVarified: { type: Date },
     bio: { type: String },
     image: { type: String },
